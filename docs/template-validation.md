@@ -20,12 +20,18 @@
 
 Skillsの参考評価はCodex上で行いました。Copilot Studentでの動作検証を代替するものではありません。
 
+## GitHub上で確認したこと
+
+2026年10月8日、[配布用リポジトリ](https://github.com/mochan-tk/hackathon-for-student-20261017)の `main` に初版を反映し、Template repositoryを有効にしました。
+
+コミット `8317f5c` の [Check実行結果](https://github.com/mochan-tk/hackathon-for-student-20261017/actions/runs/37738611704)は成功です。GitHubのLinux runner、Node.js 24で、依存関係のインストール、lint・型・本番ビルド、ChromiumのPC・スマホ幅の操作テストを確認しました。
+
 ## 配布前に残っている確認
 
 - 新規Codespaceでdevcontainerを構築し、ポート転送から操作する。
 - Copilot appでclone、設定受け入れ、Setup、Run、Browser、Changesを通す。
 - Studentアカウントで、企画整理→Plan→実装→完成条件との照合を両経路で通す。
-- GitHub上でCheckを実行し、テンプレートから作成したリポジトリでPagesを公開する。
+- テンプレートから作成したチーム用リポジトリでPagesを公開する。
 - Windows・LinuxでCopilot appの標準手順を通す。
 
 これらは未実施です。ローカルでのホスト名再現や設定の構文検証を、実サービスでの成功として扱いません。[運営向け手順](facilitator.md)に沿って実施し、環境・日付・結果を追記してください。
