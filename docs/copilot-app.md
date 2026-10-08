@@ -33,7 +33,7 @@ Copilot appによる編集はPC上で行います。Codespacesで動作確認す
 2. [教材のGitHubページ](https://github.com/mochan-tk/hackathon-for-student-20261017)で **Use this template → Create a new repository** を選び、チーム用リポジトリを作ります。すでに作ったものがある場合は、そのリポジトリを使います。
 3. Copilot appを開き、**Sign in to GitHub** で今回使う学生アカウントにログインします。
 4. **Projects** 横の追加ボタンから **GitHub repository** を選び、チームのリポジトリを選択してcloneします。
-5. そのプロジェクトで新しいsessionを作り、実行場所を **Local repository**、モードを **Interactive**、モデルを **Auto** にします。特定モデルを選ぶ手順はありません。
+5. そのプロジェクトで新しいsessionを作り、実行場所を **Local repository**（版によっては **Current checkout**）、モードを **Interactive**、モデルを **Auto** にします。特定モデルを選ぶ手順はありません。
 
 Autoが表示されない、利用権利や利用上限の表示が出る場合は、アカウント名と表示内容を運営に見せてください。
 
@@ -61,9 +61,9 @@ git switch -c feat/first-demo
 
 ### Codespacesで動作確認する場合
 
-PCでのRunを省き、下の[Codespacesへ変更を渡して確認する手順](#codespacesへ変更を渡して確認する)を使います。**最初は、作成した作業ブランチをすぐにpushして、Codespacesでスターターの起動を確かめます。その後は、確認したい変更ができるたびにcommit・pushしてからCodespacesへ移ります。**
+PCでのRunを省き、下の[Codespacesへ変更を渡して確認する手順](#codespacesへ変更を渡して確認する)を使います。**手順4で企画をファイルに保存したら、Appの画面で最初のcommit・pushを行い、Codespacesでスターターの起動を確かめます。その後も、確認したい変更ができるたびにAppの画面でcommit・pushしてからCodespacesへ移ります。**
 
-Copilotには「編集はこのPC、実行とブラウザ確認はCodespacesで行う。確認したい変更ができたら、その都度作業ブランチへのcommit・pushとCodespacesでの確認コマンドを案内して。実行できない確認は未確認として残して」と伝えます。
+Copilotには「編集はこのPC、実行とブラウザ確認はCodespacesで行う。確認したい変更ができたら、変更内容とコミットメッセージ案、Codespacesでの確認コマンドを示して待って。commit・pushは自分でAppの画面から行う。実行できない確認は未確認として残して」と伝えます。
 
 ## 4. 資料を渡してPlanで計画する
 
@@ -90,6 +90,8 @@ docs/product.mdに整理する企画・完成条件の案を作ってくださ�
 | [tasks.md](tasks.md) | 実装の順番と進捗 |
 | [verification.md](verification.md) | 実施した確認、結果、未確認のこと |
 
+Codespacesで動作確認する場合は、ここで[変更を渡して確認する手順](#codespacesへ変更を渡して確認する)へ進み、企画ファイルをcommit・pushしてスターターが起動することを確かめてから実装を始めます。
+
 ## 5. Interactiveで実装と確認を繰り返す
 
 [共通の実装ループ](common/build-loop.md)に沿って、次を送ります。
@@ -99,8 +101,9 @@ docs/product.mdとdocs/tasks.mdを読み、最初の未完了タスクから実�
 完成条件に対応する確認方法を決め、必要な機能テストを用意してください。
 並び替えなど期待結果が明確な機能は、先にテストを書いて未実装時の失敗も確認してください。
 実行場所がPCの場合は、実装後にnpm run checkとnpm run test:e2eを実行してください。
-実行場所がCodespacesの場合は、確認できる小さな変更ごとに、意図した変更を作業ブランチへcommit・pushしてください。
-その後、Codespacesでこちらが実行するpullと確認コマンドを案内し、結果を渡すまで次の修正を待ってください。
+実行場所がCodespacesの場合は、確認できる小さな変更ごとに、変更内容とコミットメッセージ案を示してください。
+commit・pushはこちらがCopilot appの画面で行うので、自動実行せず待ってください。
+Codespacesでこちらが実行するpullと確認コマンドも案内し、結果を渡すまで次の修正を待ってください。
 verify-goalスキルで完成条件と実装を照合し、確認結果をdocs/verification.mdへ記録してください。
 未達の条件はdocs/tasks.mdへ戻して、範囲内の修正と再確認を続けてください。
 人の判断、認証、外部サービスの準備が必要なら、その理由と次の操作を知らせてください。
@@ -109,7 +112,7 @@ verify-goalスキルで完成条件と実装を照合し、確認結果をdocs/v
 
 `verify-goal` が認識されない場合は、`.github/skills/verify-goal/SKILL.md` を読むよう伝えます。必要な確認に答え、**Changes** で変更内容を確認しながら進めます。
 
-Codespacesで実行する場合は、最初に「実行場所はCodespacesです」と伝えます。**実装 → commit・push → Codespacesでpull・確認 → 結果をAppへ渡す → 修正**を、小さい変更ごとに繰り返します。結果を受け取る前に、テスト成功や完成条件の達成として記録しないようにします。
+Codespacesで実行する場合は、最初に「実行場所はCodespacesです」と伝えます。**実装 → 学生がAppの画面でcommit・push → Codespacesでpull・確認 → 結果をAppへ渡す → 修正**を、小さい変更ごとに繰り返します。結果を受け取る前に、テスト成功や完成条件の達成として記録しないようにします。
 
 途中で終了した場合は、同じsessionで次を送ります。新しいsessionを作った場合も、保存済みの3ファイルが引き継ぎに使えます。
 
@@ -145,21 +148,15 @@ MCPの追加は必須ではありません。AIがBrowserを操作できない�
 
 ### Codespacesへ変更を渡して確認する
 
-この手順は、実装中に何度も使います。**Codespacesで確かめたい変更ができたら、その場でPC側の変更をcommit・pushします。アプリ全体の完成や、最後のPR作成まで待つ必要はありません。** このcommit・pushは、動作確認するコードをCodespacesへ渡すためのものです。確認結果は実行後に記録し、`main`への統合は手順7で行います。
+この手順は、実装中に何度も使います。**Codespacesで確かめたい変更ができたら、その場で学生がCopilot appの画面からcommit・pushします。アプリ全体の完成や、最後のPR作成まで待つ必要はありません。** このcommit・pushは、動作確認するコードをCodespacesへ渡すためのものです。確認結果は実行後に記録し、`main`への統合は手順7で行います。
 
 PCとCodespacesのファイルは自動同期されません。**同じチームリポジトリの同じ作業ブランチ**を使います。以下の `feat/first-demo` は、実際に使っているブランチ名に置き換えてください。
 
-1. PCのAppでファイルを保存し、**Changes** で意図した変更を確認してcommitします。Copilotに「今回確認したい変更だけを確認し、この作業ブランチにcommit・pushしてください」と依頼しても構いません。初回でファイルをまだ変更していない場合は、新しいcommitは不要なので次のpushへ進みます。
-2. **commitしたら、続けてすぐにpushします。** PCのTerminalでブランチ名を確認し、GitHubへ送ります。Copilotがpush済みの場合も、ブランチ名とコミット番号を確認します。未コミットの変更や、まだpushしていないコミットはCodespacesへ届きません。
-
-   ```sh
-   git branch --show-current
-   git push -u origin feat/first-demo
-   git rev-parse --short HEAD
-   ```
-
-3. GitHubで**同じチームリポジトリ**を開き、**Code → Codespaces** からCodespaceを作成するか、既存のものを開きます。環境準備は[Codespacesの手順](codespaces.md#2-codespaceを開く)を参照してください。
-4. Codespacesで前回のサーバーが動いていれば、そのTerminalで `Ctrl+C` を押して止めます。次に `git status` を実行します。未コミットの変更がある場合は、内容を確認して保存・コミットするか運営へ相談し、先に作業ツリーを整理します。変更を消すための `reset --hard` や強制的な切り替えは行いません。変更がなければ、次を実行します。
+1. PC側の編集が終わったらファイルを保存し、Appの **Changes** を開きます。入力欄の上に見当たらない場合は、右パネルの **＋ → Changes** から開けます。表示する変更を **Uncommitted** に切り替え、ファイルごとの差分と、表示中の作業ブランチ名を確認します。
+2. **Changesのブランチ操作メニュー（branch actions）**を開き、**Commit** の操作を選びます。確認画面が出たら、対象の変更とコミットメッセージを確認して実行します。メッセージは「企画と完成条件を記録」「入力フォームを追加」のように変更内容が分かるものにします。Copilotにはメッセージ案を相談できます。すでにコミット済みの場合は、新しいcommitは不要なので次へ進みます。
+3. **commitしたら、同じメニューから続けてすぐにPushの操作を選びます。** 初回にブランチの公開を求められたら、チームのリポジトリへ現在の作業ブランチを公開します。Appの処理完了を待ちます。**CommitはPC内への記録、PushはGitHubへの送信**です。commitだけではCodespacesへ届きません。
+4. ブラウザでGitHubの**同じチームリポジトリ**を開き、ブランチ選択欄で作業ブランチを選びます。Appの **Changes** も **Uncommitted** から **Last commit** に切り替えます。両方の最新コミットメッセージと短いコミット番号（SHA）が一致することを確認し、ブランチ名と番号を控えます。
+5. **ここからはCodespacesで動作確認する場合の操作です。** GitHubの **Code → Codespaces** からCodespaceを作成するか、既存のものを開きます。環境準備は[Codespacesの手順](codespaces.md#2-codespaceを開く)を参照してください。以降のコマンドは**CodespacesのTerminal**で実行します。前回のサーバーが動いていれば、そのTerminalで `Ctrl+C` を押して止めます。次に `git status` を実行します。未コミットの変更がある場合は、内容を確認して保存・コミットするか運営へ相談し、先に作業ツリーを整理します。変更を消すための `reset --hard` や強制的な切り替えは行いません。変更がなければ、次を実行します。
 
    ```sh
    git fetch origin
@@ -169,22 +166,24 @@ PCとCodespacesのファイルは自動同期されません。**同じチーム
    git rev-parse --short HEAD
    ```
 
-5. PCとCodespacesで**ブランチ名とコミット番号が一致**することを確認します。`pull --ff-only` が失敗した場合は、双方に別の変更がある可能性があるため、その出力をCopilotか運営へ渡して解決します。一致したらCodespacesで起動します。
+6. GitHubで控えたものとCodespacesで**ブランチ名とコミット番号が一致**することを確認します。短い番号の桁数が違う場合は、先頭の文字列が一致することを確認します。`pull --ff-only` が失敗した場合は、双方に別の変更がある可能性があるため、その出力をCopilotか運営へ渡して解決します。一致したらCodespacesで起動します。
 
    ```sh
    npm ci
    npm run dev
    ```
 
-6. **Ports → 4280 → Open in Browser** を開いて操作します。ポートの公開範囲は **Private** のままで構いません。別の学生もログイン済みの同じPCで交代して確認できます。Codespaceやサーバーを停止すると、この確認用URLは使えなくなります。
-7. Codespacesの別Terminalで `npm run check` と `npm run test:e2e` を実行します。結果・エラー全文・実際の操作結果・確認したコミット番号をPCのCopilot appへ渡し、修正と `docs/verification.md` への記録を依頼します。スクリーンショットも添えられます。修正後は、再びコミット・pushから繰り返します。
+7. **Ports → 4280 → Open in Browser** を開いて操作します。ポートの公開範囲は **Private** のままで構いません。別の学生もログイン済みの同じPCで交代して確認できます。Codespaceやサーバーを停止すると、この確認用URLは使えなくなります。
+8. Codespacesの別Terminalで `npm run check` と `npm run test:e2e` を実行します。結果・エラー全文・実際の操作結果・確認したコミット番号をPCのCopilot appへ渡し、修正と `docs/verification.md` への記録を依頼します。スクリーンショットも添えられます。修正後は、再びAppの画面でcommit・pushするところから繰り返します。
 
-この経路では、通常はPC側で編集し、Codespaces側で実行・確認すると変更を追いやすくなります。Codespacesでもファイルを編集した場合は、そちらの変更もコミット・pushし、PCの作業ツリーに未コミットの変更がないことを確認して `git pull --ff-only` で取り込んでから編集を再開します。
+このGUI手順は[Copilot app v1.1.26以降のbranch actions](https://github.com/github/app/releases/tag/v1.1.26)を前提にしています。Commit・Pushの項目は、版やブランチの状態で表記が変わります。[v1.1.27以降は対象が0件のPull・Pushは表示されません](https://github.com/github/app/releases/tag/v1.1.27)。Pushが見えないだけで送信済みとは判断せず、GitHub上のブランチと最新コミットで確認してください。メニューが見つからない場合はAppのバージョンと画面を運営に見せてください。
+
+この経路では、通常はPC側で編集し、Codespaces側で実行・確認すると変更を追いやすくなります。Codespacesでもファイルを編集した場合は、そちらの変更もコミット・pushします。その後、PCのAppで未コミットの変更がないことを確認し、ブランチ操作メニューの **Pull changes** で取り込んでから編集を再開します。取り込みに失敗した場合は、表示された内容をCopilotか運営へ渡して解決します。
 
 ## 7. 変更を保存し、PRから公開へ進む
 
 1. **Changes** で、採用したい変更になっているか確認します。
-2. Copilotへ「意図した変更だけをコミットして現在の作業ブランチをpushし、mainへのPRを作る手順を案内して」と頼みます。コマンドの確認が表示されたら、対象ブランチとファイルを確認します。
+2. 上の[GUIで変更を渡す手順](#codespacesへ変更を渡して確認する)の1〜4と同じ操作で、残っている変更や検証記録をcommit・pushし、GitHubへの反映を確認します。PCで動作確認した場合もこの操作を使います。すべて送信済みなら次へ進みます。
 3. **Create PR** が表示されている場合は、そこからPRを作れます。表示されない場合は、push後にGitHubのチームリポジトリで **Compare & pull request** を使います。
 4. チームで差分、確認結果、CIを確認して `main` へマージします。
 5. 継続して使えるURLが必要になったら、[Azure Static Web Appsへの公開手順](common/publish.md)へ進み、公開URLで改めて操作します。PCやCodespacesでの動作確認までなら、Azureへのデプロイは不要です。

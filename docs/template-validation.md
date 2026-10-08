@@ -22,6 +22,8 @@
 
 Skillsの参考評価はCodex上で行いました。Copilot Studentでの動作検証を代替するものではありません。
 
+Copilot appのGUI手順は、[v1.1.26のbranch actions追加](https://github.com/github/app/releases/tag/v1.1.26)と[v1.1.27のPull・Pushの表示条件](https://github.com/github/app/releases/tag/v1.1.27)を公式リリースノートで確認しました。macOSの実機ではChanges、Uncommitted／Last commit、コミット番号、ブランチ操作メニュー、Current checkoutの表示を確認しました。GUIでcommit・pushしてCodespacesへ渡す一連の操作は、配布前の確認として残っています。
+
 ## GitHub上で確認したこと
 
 2026年10月8日、[配布用リポジトリ](https://github.com/mochan-tk/hackathon-for-student-20261017)の `main` に初版を反映し、Template repositoryを有効にしました。
