@@ -1,0 +1,22 @@
+{
+  "name": "Student Hackathon · Node 24",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:24-bookworm",
+  "remoteUser": "node",
+  "postCreateCommand": "npm ci && npx playwright install --with-deps chromium",
+  "forwardPorts": [5173],
+  "portsAttributes": {
+    "5173": {
+      "label": "チームのアプリ",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "dbaeumer.vscode-eslint"
+      ]
+    }
+  }
+}

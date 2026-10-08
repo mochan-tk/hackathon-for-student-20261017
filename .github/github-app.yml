@@ -1,0 +1,19 @@
+# 初回にApp上で内容を確認して受け入れると適用されます。
+scripts:
+  - name: Setup
+    command: npm ci
+    triggers:
+      - session.create
+  - name: Run
+    command: npm run dev
+  - name: Check
+    command: npm run check
+  - name: Install test browser
+    command: npx playwright install chromium
+  - name: Browser tests
+    command: npm run test:e2e
+server_ready_pattern: 'Local:\s+(https?://\S+)'
+auto_open_in_browser: true
+automation:
+  auto_issue_session: false
+  remote_control: false

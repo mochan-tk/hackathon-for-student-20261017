@@ -1,0 +1,69 @@
+# 学生ハッカソン開発スターター
+
+アイデアを、確かめられるアプリへ。
+
+学生チームが目的と完成条件を決め、GitHub Copilotと一緒に実装・テスト・改善するための教材兼テンプレートです。**CodespacesのCopilot ChatとGitHub Copilot appのどちらでも、同じ企画・コード・完成条件で進められます。**
+
+## はじめる
+
+| 使う環境 | 最初に開くガイド | 準備 |
+| --- | --- | --- |
+| Codespaces + VS Code Copilot Chat | [Codespacesで進める](docs/codespaces.md) | GitHubとCopilotが使えるアカウント、ブラウザ |
+| GitHub Copilot app | [Copilot appで進める](docs/copilot-app.md) | 同じアカウント、Git、Node.js 24 LTS、Copilot app |
+
+チームごとにこのテンプレートからリポジトリを作ります。GitHub Copilot StudentとGitHub Proを利用する想定です。権利の有効化と利用残量は事前にアカウント画面で確認してください。
+
+## 企画から公開まで
+
+1. [アイデアをつくる](docs/common/ideation.md)：困りごとを調べ、解決したいことを選ぶ。
+2. [企画書](docs/product.md)に、目的・最大3つのコア機能・完成条件・対象外を残す。
+3. 画面案を[元資料](docs/source/README.md)にまとめ、CopilotのPlanで実装と検証の計画を相談する。
+4. [実装と改善の進め方](docs/common/build-loop.md)に沿って、実装・テスト・修正を進める。
+5. [完成条件を確認](docs/common/verification.md)し、別の学生にも使ってもらう。
+6. [公開と発表](docs/common/publish.md)へ進む。
+
+## チームで更新する3つのファイル
+
+| ファイル | 残すこと |
+| --- | --- |
+| [docs/product.md](docs/product.md) | 誰の何を解決するか、できたと判断する条件、対象外 |
+| [docs/tasks.md](docs/tasks.md) | 実装計画、今の作業、残っていること |
+| [docs/verification.md](docs/verification.md) | 実際に確かめた結果、証拠、未確認のこと |
+
+入力欄はまだ空です。[締切管理の記入例](docs/examples/deadline.md)を参考に、自分たちの企画を記入してください。最初のアプリは起動と入力操作を確認するための小さな画面です。
+
+## 共通のコマンド
+
+Node.js 24 LTSを使います。nvmがある場合は `nvm install`、続いて `nvm use` で `.nvmrc` に合わせられます。
+
+```sh
+npm ci
+npm run dev
+```
+
+ターミナルに表示されたURLを開きます。Codespacesではポート5173の転送先を開きます。
+
+```sh
+npm run check
+npx playwright install chromium
+npm run test:e2e
+```
+
+`check` はlint・型チェック・本番ビルド、`test:e2e` はブラウザでの操作確認です。Linuxのブラウザ依存ライブラリが足りない場合は `npx playwright install --with-deps chromium` を実行します。Codespacesでは初回準備に含まれています。
+
+最初のテストはスターターの起動確認用です。企画を実装するときに、自分たちの完成条件を確かめるテストへ更新します。
+
+## Copilotとの進め方
+
+共通指示は [.github/copilot-instructions.md](.github/copilot-instructions.md)。教材に固有の2つの作業をSkillsにしています。
+
+- [prepare-project](.github/skills/prepare-project/SKILL.md)：企画メモと画面案を開発用の資料に整理する。
+- [verify-goal](.github/skills/verify-goal/SKILL.md)：完成条件と実際の結果を照合し、残る作業を見つける。
+
+「prepare-projectを使って企画を整理して」のように依頼できます。認識されないときはSkillファイルを添付・参照します。モード切り替えやファイルの渡し方は各環境のガイドにあります。
+
+## 運営・メンター向け
+
+[事前準備とリハーサル](docs/facilitator.md)に、両環境で確認することをまとめています。[設計の根拠と公式資料](docs/references.md)も参照してください。
+
+[スターターの検証記録](docs/template-validation.md)には、実施した確認と残る確認を記載しています。配布前に、参加者と同じ条件で企画整理から公開まで通してください。
