@@ -12,7 +12,7 @@ scripts:
     command: npx playwright install chromium
   - name: Browser tests
     command: npm run test:e2e
-server_ready_pattern: 'Azure Static Web Apps emulator started at (http://127\.0\.0\.1:4280)'
+server_ready_pattern: 'App running at (http://127\.0\.0\.1:4280)'
 auto_open_in_browser: true
 automation:
   auto_issue_session: false

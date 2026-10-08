@@ -9,11 +9,11 @@ export default defineConfig(() => {
   return {
     plugins: [react()],
     server: {
-      port: 5173,
+      port: Number(process.env.PORT ?? 4280),
       strictPort: true,
       // Codespacesの転送先だけを追加し、通常のローカル実行は既定の許可範囲を使う。
       allowedHosts: codespaceHost ? [codespaceHost] : [],
-      // CodespacesのHTTPS転送先からSWA経由でホットリロードする。
+      // CodespacesのHTTPS転送先で、画面と同じ公開ポートをホットリロードにも使う。
       ws: codespaceHost ? { protocol: 'wss', host: codespaceHost, clientPort: 443 } : undefined,
     },
   }

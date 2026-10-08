@@ -1,20 +1,19 @@
 {
   "name": "Student Hackathon · Node 24",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:24-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:4": {}
+  },
   "remoteUser": "node",
   "postCreateCommand": "npm ci && npx playwright install --with-deps chromium",
   "forwardPorts": [4280],
   "portsAttributes": {
     "4280": {
-      "label": "チームのアプリ（SWA）",
+      "label": "チームのアプリ",
       "onAutoForward": "openBrowser"
     },
-    "5173": {
-      "label": "Vite（SWAから接続）",
-      "onAutoForward": "ignore"
-    },
     "4281": {
-      "label": "ビルド後の確認（SWA）",
+      "label": "本番ビルド・コンテナの確認",
       "onAutoForward": "silent"
     }
   },

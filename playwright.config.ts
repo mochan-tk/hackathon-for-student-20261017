@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test'
 
+const externalBaseURL = process.env.E2E_BASE_URL
+const baseURL = externalBaseURL ?? 'http://127.0.0.1:4281'
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
@@ -8,7 +11,7 @@ export default defineConfig({
   workers: process.env.CI ? 2 : undefined,
   reporter: 'list',
   use: {
-    baseURL: 'http://127.0.0.1:4281',
+    baseURL,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
@@ -24,9 +27,10 @@ export default defineConfig({
       },
     },
   ],
-  webServer: {
+  // CIでは起動済みの本番用コンテナに同じテストを実行する。
+  webServer: externalBaseURL ? undefined : {
     command: 'npm run build && npm run preview',
-    url: 'http://127.0.0.1:4281',
+    url: baseURL,
     reuseExistingServer: false,
     timeout: 120_000,
   },

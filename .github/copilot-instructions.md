@@ -1,6 +1,6 @@
 # このリポジトリでの開発
 
-学生チームの企画を実装する、Vite + React + TypeScriptのスターターです。日本語で、結果と次に必要な判断を簡潔に伝えてください。
+学生チームの企画を実装する、Vite + React + TypeScriptとNode.js APIのスターターです。画面とAPIを1つのコンテナにまとめ、Azure Container Appsへ公開できます。日本語で、結果と次に必要な判断を簡潔に伝えてください。
 
 ## 必要な資料
 
@@ -14,10 +14,12 @@
 Node.js 24 LTS、npm、`package-lock.json` を使用します。
 
 - 初回準備: `npm ci`
-- 起動: `npm run dev`（SWA CLIの4280を開く。Viteの5173は内部用）
+- 起動: `npm run dev`（ViteとNode.js APIを起動し、4280を開く。Docker不要）
 - 静的チェック・型チェック・本番ビルド: `npm run check`
 - ブラウザ準備: `npx playwright install chromium`（Linuxの依存ライブラリが足りない場合は `--with-deps`）
-- ブラウザテスト: `npm run test:e2e`（ビルド後にSWAの4281で実行。API追加時は起動・テストにも接続設定を追加）
+- ブラウザテスト: `npm run test:e2e`（ビルド後に本番用Node.jsサーバーの4281で実行。API追加時はその動作もテスト）
+- 本番プレビュー: `npm run build` の後に `npm run preview`（4281）。コンテナは `npm start` で8080を使う。CIは本番コンテナを起動してE2Eを実行する。
+- API: `server/api.js` に追加し、フロントは `/api/...` の相対URLで呼ぶ。APIキーはサーバー側の環境変数で扱う。共有・永続データは外部DBへ保存し、コンテナ内ファイルへ依存しない。
 - Copilot appからCodespacesへ渡す場合は、変更内容・コミットメッセージ案・Codespacesでの起動とテストのコマンドを示し、学生がAppの画面でcommit・pushして確認結果を返すまで次の修正を待つ。明示的な依頼がなければcommit・pushを自動実行しない。初回はpush済みの作業ブランチからCodespaceを作成し、既存Codespaceの再利用時は同じブランチでGUIのPullを使う。Gitの確認コマンドやコミット番号の照合を通常の手順に追加しない。未保存・未pushの変更や、GitHubへのpushが既存Codespaceへ自動反映されるとは扱わない。
 
 ## 作業と完了

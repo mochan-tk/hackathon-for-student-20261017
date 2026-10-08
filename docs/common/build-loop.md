@@ -11,7 +11,7 @@ npm ci
 npm run dev
 ```
 
-SWA CLIの4280番を開き、画面が見えることを確かめます。PC・Codespacesでの開き方とAPIの追加は[共通の開発環境](local-development.md)を参照してください。
+Node.js開発サーバーの4280番を開き、画面が見えることを確かめます。PC・Codespacesでの開き方とAPIの追加は[共通の開発環境](local-development.md)を参照してください。
 
 ## 2. Planで作業と検証を決める
 

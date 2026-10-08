@@ -7,21 +7,21 @@
     "node": ">=24 <25"
   },
   "scripts": {
-    "dev": "swa start http://127.0.0.1:5173 --run \"npm run dev:frontend\" --host 127.0.0.1 --port 4280 --swa-config-location public",
-    "dev:frontend": "vite --host 127.0.0.1",
+    "dev": "node --env-file-if-exists=.env --watch server/index.js --dev",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "test": "npm run test:e2e",
     "test:e2e": "playwright test",
     "check": "npm run lint && npm run build",
-    "preview": "swa start dist --host 127.0.0.1 --port 4281"
+    "preview": "node --env-file-if-exists=.env server/index.js --preview",
+    "start": "node --env-file-if-exists=.env server/index.js"
   },
   "dependencies": {
+    "express": "5.2.1",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
-    "@azure/static-web-apps-cli": "2.0.10",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.64.0",
     "@types/node": "^24.19.1",

@@ -1,50 +1,62 @@
-# 動くアプリで発表し、Azureへ公開する
+# 動くアプリで発表し、Container Appsへ公開する
 
-開発中の動作確認は[SWA CLI](local-development.md)に統一します。PC・Codespacesのプレビューで完成条件を確認し、その画面で発表できます。Codespacesの転送URLは起動中の確認用であり、継続して使える公開URLではありません。
+普段は[共通の開発手順](local-development.md)でPC・Codespacesのアプリを起動します。Copilot appでは **Run → Browser**、Codespacesでは **4280の転送先**で確認・発表できます。継続して使えるURLが必要になったら、**Azure Container Apps**へ公開します。
 
-継続して共有する場合は、同じアプリを **Azure Static Web Apps** へ公開します。この教材にGitHub Pagesのデプロイ手順はありません。
+公開するのは、Reactの画面とNode.jsのAPIをまとめた1つのコンテナです。GitHub Actionsが本番コンテナを起動してブラウザテストを行い、成功した**同じイメージ**をGitHub Container Registry（GHCR）へ保存してAzureへ渡します。PCへのDockerのインストールは必須ではありません。
 
-## 1. 公開する変更をそろえる
+## 1. 初回だけ公開先を準備する
 
-1. [完成確認](verification.md)を終え、変更と検証記録をGitHubへpushします。
-2. PRとCIの結果をチームで確認し、`main`へマージします。
-3. 公開作業をするPCまたはCodespacesで、未コミット変更がないことを確認してから`main`を取得します。
+チームの代表者が運営と[Azure・GitHubの初期設定](azure-setup.md)を行います。学生のAzureアカウント、Container App、GitHub Actionsからの接続を設定する手順です。標準構成では公開可能なコンテナをGHCRの **Public** パッケージに置きます。
 
-```sh
-git status
-git switch main
-git pull --ff-only origin main
-npm ci
-npm run check
-npm run test:e2e
-```
+初期設定前も **Check** の自動テストは実行できます。公開を有効にする変数が未設定なら、イメージの公開とAzureへのデプロイはスキップされます。Azureリソースはワークフローが自動作成する設計にはしていません。
 
-## 2. Azureの公開先を準備する
+## 2. GitHubへ変更を渡す
 
-この段階からAzureアカウントと利用できるサブスクリプションが必要です。学生クレジットがあることだけで、すべてのサービスが利用可能・無料とは判断しません。[Azure for Studentsの条件](https://azure.microsoft.com/en-us/pricing/offers/ms-azr-0170p/)と[SWAのプラン](https://learn.microsoft.com/en-us/azure/static-web-apps/plans)を確認します。
+1. [完成確認](verification.md)を終えます。
+2. Copilot appの場合は[AppのGUI手順](../copilot-app.md#codespacesへ変更を渡して確認する)でcommit・pushします。Codespacesの場合は[保存の手順](../codespaces.md#7-保存し必要になったら公開する)を使います。
+3. GitHubでPRを作り、**Check** の成功、画面の操作結果、チームの完成条件を確認して`main`へマージします。
 
-運営・メンターと、対象サブスクリプション、リソースグループ、アプリ名、プランを決めます。Azure portalの **Static Web Apps** から公開先を作成します。まずFreeプランの条件を確認し、ソースは手動デプロイ向けの **Other** を選びます。既存のチーム用SWAがあれば、それを使います。
+## 3. 自動テストとデプロイを待つ
 
-以下はフロントエンドだけの公開手順です。APIがあるチームは次節も読み、APIを含む配布物とランタイムを用意してから公開します。
+リポジトリの **Actions → Check** で、`main`へのマージ後の実行を開きます。
 
-## 3. ビルド済みのアプリを公開する
+| ジョブ | 行うこと |
+| --- | --- |
+| `check` | lint・型・ビルドを確認し、Linux用の本番コンテナを起動してAPI・PC幅・スマホ幅をテスト |
+| `publish` | テストに使ったコンテナを再ビルドせずGHCRへ保存 |
+| `deploy` | 保存済みイメージを、既存のContainer Appへデプロイして起動確認 |
 
-リポジトリのルートで、次の例の`YOUR_...`を準備した公開先の値へ置き換えます。SWA CLIの対話ログインでAzureアカウントを認証します。GitHubへのログインとは別です。
+`publish`には`ENABLE_CONTAINER_PUBLISH=true`、`deploy`にはさらに`ENABLE_AZURE_DEPLOY=true`とAzure接続設定が必要です。デプロイは`main`だけで動きます。
 
-```sh
-npx swa login --subscription-id YOUR_SUBSCRIPTION_ID --resource-group YOUR_RESOURCE_GROUP --app-name YOUR_APP_NAME
-npx swa deploy ./dist --subscription-id YOUR_SUBSCRIPTION_ID --resource-group YOUR_RESOURCE_GROUP --app-name YOUR_APP_NAME --env production
-```
+初期設定の直後など、コードを変更せずに実行したい場合は **Actions → Check → Run workflow** でブランチを **main** にして実行します。PRのテスト成功だけではAzureへの公開は完了していません。
 
-公開対象は、直前にテストした`dist/`です。途中でソースを変更したらビルドとテストをやり直します。想定外のリソース作成を求められたら、名前・サブスクリプション・権限をメンターと確認します。デプロイトークンをコード・チャット・Gitへ貼り付けないでください。参考：[swa login](https://azure.github.io/static-web-apps-cli/docs/cli/swa-login/)・[swa deploy](https://azure.github.io/static-web-apps-cli/docs/cli/swa-deploy/)。
+## 4. 公開URLで確認する
 
-完了後、Azure portalのSWA概要にある公開URLを開きます。必須DoDに対応する操作、URL直接アクセス・再読み込み、API、実際のログインを使う場合はその動作を確認し、[verification.md](../verification.md)にURL・コミット番号・結果を追記します。ローカルの成功を公開先の成功として転記しません。
+成功した実行の **Summary** にある **Azure Container Apps → URL** を開きます。Azure portalのContainer App概要にある **Application URL** からも開けます。
 
-## API・共有DB・アプリ内AIを使う場合
+必須DoDに対応する操作、URLを直接開いた場合・再読み込み、API、使っている場合は実際のログインや共有DBを確認します。[verification.md](../verification.md)にURL・結果・未確認事項を記録します。CIの`/api/health`成功はサーバーの起動確認であり、チームの完成条件すべての達成を意味しません。
 
-- **API**：SWAの管理Functionsを使う場合は、フロントに加えてAPIも配布します。例えばNode.js 22向けのAPIなら、上のdeployコマンドへ`--api-location ./api --api-language node --api-version 22`を追加します。TypeScriptなどのビルドと依存関係を用意し、`public/staticwebapp.config.json`の`platform.apiRuntime`も合わせます。[Managed Functions](https://learn.microsoft.com/en-us/azure/static-web-apps/apis-functions)
-- **環境変数**：ローカルの設定は自動でAzureへ移りません。APIの接続情報・秘密情報は、公開先のSWAアプリケーション設定へ登録します。`local.settings.json`はGitへ入れません。[APIの設定](https://learn.microsoft.com/en-us/azure/static-web-apps/application-settings)
-- **共有DB**：API経由でアクセスする構成を選びます。ブラウザのlocalStorageに入れたデータは、公開先へ自動では移りません。[Cosmos DB Free Tierの条件](https://learn.microsoft.com/en-us/azure/cosmos-db/free-tier)
-- **アプリ内AI**：モデル・地域・利用枠を確認します。秘密のAPIキーが必要な呼び出しはサーバー側で行います。[Foundryのクォータ](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/quotas-limits)・[学生アカウントとMarketplaceモデルの条件](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-from-partners)
+更新は同じ **編集 → 確認 → commit・push → PR → マージ** で行います。
 
-Azureへのリソース作成・デプロイは、この教材の作成環境では未実施です。配布前に、学生と同じ条件で[運営のリハーサル](../facilitator.md)を行い、結果を残してください。
+## API・DB・アプリ内AIを使う場合
+
+- **API**：`server/api.js`を入口に実装します。画面は`/api/...`へアクセスし、同じNodeサーバーで処理します。
+- **環境変数・秘密情報**：開発中は`.env`、AzureではContainer AppのSecretsとコンテナの環境変数を使います。ローカルの`.env`は自動では公開先へ移りません。APIキーはサーバー側に置き、`VITE_`変数や画面のコードへ入れません。[環境変数](https://learn.microsoft.com/en-us/azure/container-apps/environment-variables)・[Secrets](https://learn.microsoft.com/en-us/azure/container-apps/manage-secrets)
+- **共有DB・ファイル**：必要なチームは外部のDBやストレージを接続します。コンテナ内のファイルやメモリだけに保存したデータを永続化済みとして扱いません。[Container Appsのストレージ](https://learn.microsoft.com/en-us/azure/container-apps/storage-mounts)
+- **認証**：企画に必要ならアプリの認証方式を選んで実装・設定し、公開URLで確認します。スターターにログイン機能はありません。
+- **AI**：サーバーから必要なAPIを呼び出します。利用できるモデル・リージョン・課金枠を確認し、テスト用の応答と実サービスの結果を区別します。
+
+## うまくいかないとき
+
+| 状況 | 確認する場所 |
+| --- | --- |
+| `check`が失敗 | 最初に失敗したステップとログをCopilotへ渡す。テストを省略して公開しない |
+| `publish`／`deploy`がSkipped | 初期設定の有効化変数と、実行ブランチが`main`かを確認 |
+| イメージを取得できない | GHCRパッケージのPublic設定、イメージ名、Azure側のレジストリ設定 |
+| Azureへのログインに失敗 | 初期設定のID、Federated credentialsのリポジトリと`production`、GitHub Environment設定 |
+| リビジョンが起動しない | Azureのコンテナログ、環境変数、待受ポート8080、外部DB・APIへの接続 |
+| 公開後に機能が動かない | 公開URLで再現する操作・エラーと、Actionsの実行URLをCopilotへ渡す |
+
+利用が終わった後の停止・削除と費用の確認は、[初期設定の終了時の手順](azure-setup.md#5-利用を終えるとき)に従います。
+
+この公開経路の実サービスでの検証状況は[スターターの検証記録](../template-validation.md)に記載しています。

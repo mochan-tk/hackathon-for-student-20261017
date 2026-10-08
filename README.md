@@ -20,7 +20,7 @@
 3. 画面案を[元資料](docs/source/README.md)にまとめ、CopilotのPlanで実装と検証の計画を相談する。
 4. [実装と改善の進め方](docs/common/build-loop.md)に沿って、実装・テスト・修正を進める。
 5. [完成条件を確認](docs/common/verification.md)し、別の学生にも使ってもらう。
-6. 動くプレビューで発表し、継続して共有する場合は[Azureへの公開](docs/common/publish.md)へ進む。
+6. 動くプレビューで発表し、継続して共有する場合は[Azure Container Appsへの公開](docs/common/publish.md)へ進む。
 
 ## チームで更新する3つのファイル
 
@@ -41,7 +41,7 @@ npm ci
 npm run dev
 ```
 
-**SWA CLIのエミュレーター**で動作確認します。PCでは `http://127.0.0.1:4280`、Codespacesではポート **4280** の転送先を開きます。Viteは裏側の5173番で動きます。起動・終了とAPIの追加は[共通の開発環境](docs/common/local-development.md)を参照してください。
+**ViteとNode.jsのAPI**をまとめて起動します。PCでは `http://127.0.0.1:4280`、Codespacesではポート **4280** の転送先を開きます。普段の開発にDockerやAzureへのログインは不要です。起動・終了とAPIの追加は[共通の開発環境](docs/common/local-development.md)を参照してください。
 
 Copilot appでPC上のコードを編集し、GitHubへpushして[Codespacesで動かす](docs/copilot-app.md)こともできます。PCとCodespacesのファイルは自動同期されません。
 
@@ -51,7 +51,9 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-`check` はlint・型チェック・本番ビルド、`test:e2e` はビルドしたアプリをSWA CLIから配信してブラウザで操作する確認です。Linuxのブラウザ依存ライブラリが足りない場合は `npx playwright install --with-deps chromium` を実行します。Codespacesでは初回準備に含まれています。
+`check` はlint・型チェック・本番ビルド、`test:e2e` は本番用のNode.jsサーバーから画面とAPIを配信してブラウザで操作する確認です。Linuxのブラウザ依存ライブラリが足りない場合は `npx playwright install --with-deps chromium` を実行します。Codespacesでは初回準備に含まれています。
+
+公開時は画面とAPIを1つのコンテナにまとめ、Azure Container Appsへ配置します。GitHub Actionsが本番用コンテナをビルド・起動してテストするため、学生のPCへのDocker導入は必須ではありません。[手元やCodespacesでコンテナを確認する手順](docs/common/local-development.md#コンテナで確認する任意)も用意しています。
 
 最初のテストはスターターの起動確認用です。企画を実装するときに、自分たちの完成条件を確かめるテストへ更新します。
 

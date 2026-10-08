@@ -1,6 +1,6 @@
 # GitHub Copilot appで作る
 
-GitHub Copilot appをPCに入れ、手元のファイルを編集する手順です。動作確認は、PC上のSWA CLIエミュレーターで行うか、GitHubへpushした変更をCodespacesで取り込んで行うかを選べます。企画資料、完成条件、テスト、公開先は[Codespacesの手順](codespaces.md)と共通です。
+GitHub Copilot appをPCに入れ、手元のファイルを編集する手順です。動作確認は、PCで開発サーバーを起動して行うか、GitHubへpushした変更をCodespacesで取り込んで行うかを選べます。普段の開発にDockerは不要です。企画資料、完成条件、テスト、Azure Container Appsへの公開手順は[Codespacesの手順](codespaces.md)と共通です。
 
 **企画 → PCの準備 → 計画 → 実装と検証 → チームで確認 → 公開**
 
@@ -41,7 +41,7 @@ Autoが表示されない、利用権利や利用上限の表示が出る場合�
 
 ## 3. 作業ブランチと実行場所を準備する
 
-リポジトリ設定の確認が表示されたら、[.github/github-app.yml](../.github/github-app.yml)を確認して受け入れます。教材の **Setup** は依存関係のインストール、**Run** はSWA CLIとViteの起動に使います。
+リポジトリ設定の確認が表示されたら、[.github/github-app.yml](../.github/github-app.yml)を確認して受け入れます。教材の **Setup** は依存関係のインストール、**Run** は `npm run dev` を通じたViteとNode.jsのAPIの起動に使います。
 
 Terminalを開き、作業用ブランチを作ります。session開始後にチャットで `/terminal` と入力しても開けます。
 
@@ -57,7 +57,7 @@ git switch -c feat/first-demo
 2. **Run** を実行します。コマンドは `npm run dev` です。
 3. Browserパネルが開き、アプリが表示されたら準備完了です。自動表示されない場合は、`http://127.0.0.1:4280` を開きます。
 
-サーバーを動かしているTerminalは開いたままにします。確認にはSWA CLIの **4280** を使い、背後のViteの5173を直接開かないようにします。APIの追加などは[共通のローカル開発手順](common/local-development.md)を参照してください。
+サーバーを動かしているTerminalは開いたままにします。画面とAPIの確認には **4280** を使います。APIの追加や公開前のコンテナ確認は[共通のローカル開発手順](common/local-development.md)を参照してください。
 
 ### Codespacesで動作確認する場合
 
@@ -181,7 +181,7 @@ PCとCodespacesのファイルは自動同期されません。**同じチーム
 2. 上の[GUIで変更を渡す手順](#codespacesへ変更を渡して確認する)の1〜4と同じ操作で、残っている変更や検証記録をcommit・pushし、GitHubへの反映を確認します。PCで動作確認した場合もこの操作を使います。すべて送信済みなら次へ進みます。
 3. **Create PR** が表示されている場合は、そこからPRを作れます。表示されない場合は、push後にGitHubのチームリポジトリで **Compare & pull request** を使います。
 4. チームで差分、確認結果、CIを確認して `main` へマージします。
-5. 継続して使えるURLが必要になったら、[Azure Static Web Appsへの公開手順](common/publish.md)へ進み、公開URLで改めて操作します。PCやCodespacesでの動作確認までなら、Azureへのデプロイは不要です。
+5. 継続して使えるURLが必要になったら、[Azure Container Appsへの公開手順](common/publish.md)へ進み、公開URLで改めて操作します。GitHub Actionsで本番用コンテナをテストしてから公開するため、PCへのDocker導入は必須ではありません。PCやCodespacesでの動作確認までなら、Azureへのデプロイは不要です。
 
 サーバーを終了するときは、動かしているTerminalで `Ctrl+C` を押します。Codespacesを使った場合は、[Codespaces一覧](https://github.com/codespaces)から **Stop codespace** も選びます。
 

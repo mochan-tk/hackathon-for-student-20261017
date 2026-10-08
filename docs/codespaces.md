@@ -1,6 +1,6 @@
 # Codespacesで作る
 
-ブラウザの中でVS CodeとGitHub Copilotを使う手順です。PCへのNode.jsのインストールは不要です。Codespace内のSWA CLIエミュレーターで動作確認し、必要になったらAzure Static Web Appsへ公開します。
+ブラウザの中でVS CodeとGitHub Copilotを使う手順です。PCへのNode.jsやDockerのインストールは不要です。Codespace内で画面とAPIを動かして確認し、必要になったらAzure Container Appsへ公開します。
 
 **企画 → 環境準備 → 計画 → 実装と検証 → チームで確認 → 公開**
 
@@ -37,7 +37,7 @@ Node.jsは **24.x** を使います。最後のコマンドはサーバーを動
 
 画面下部の **Ports** から **4280 → Open in Browser** を選びます。ポートが表示されない場合は **Forward a Port** で `4280` を追加します。アプリが表示されたら準備完了です。
 
-`npm run dev` はSWA CLIと、その背後で画面を動かすViteを起動します。確認には **4280** のURLを使います。Viteの5173を直接開くとSWA CLIを経由しません。仕組みとAPIを追加するときの手順は[共通のローカル開発手順](common/local-development.md)を参照してください。
+`npm run dev` は画面を動かすViteとNode.jsのAPIをまとめて起動します。画面とAPIの確認には **4280** のURLを使います。仕組みとAPIの追加は[共通のローカル開発手順](common/local-development.md)を参照してください。
 
 転送ポートは **Private** のまま使います。このURLはCodespaceとサーバーの起動中に使う確認用で、停止するとアクセスできません。チームの学生に試してもらうときは、ログイン済みの同じPCで交代して操作できます。継続して使える公開URLが必要になったら、最後のAzureへの公開へ進みます。
 
@@ -144,7 +144,9 @@ git diff
 git push -u origin feat/first-demo
 ```
 
-GitHubのチームリポジトリで **Compare & pull request** を開き、`main` へのPRを作ります。チームで変更とCIの結果を確認してマージします。Codespacesでの開発・動作確認までなら、Azureへのデプロイは不要です。継続して使えるURLが必要になったら、[Azure Static Web Appsへの公開手順](common/publish.md)へ進みます。公開後も実際のURLで動作を確認します。
+GitHubのチームリポジトリで **Compare & pull request** を開き、`main` へのPRを作ります。チームで変更とCIの結果を確認してマージします。CIには本番用コンテナを起動して行うテストも含まれます。Codespacesでの開発・動作確認までなら、Azureへのデプロイは不要です。継続して使えるURLが必要になったら、[Azure Container Appsへの公開手順](common/publish.md)へ進みます。公開後も実際のURLで動作を確認します。
+
+公開前に自分たちでコンテナを操作したい場合は、[Codespacesでのコンテナ確認](common/local-development.md#コンテナで確認する任意)を使えます。日々の編集は引き続き `npm run dev` で進められます。
 
 作業を終えたら、[Codespaces一覧](https://github.com/codespaces)のメニューから **Stop codespace** を選びます。ブラウザタブを閉じるだけでは、直ちに停止するとは限りません。
 
