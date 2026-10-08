@@ -1,6 +1,6 @@
 # Codespacesで作る
 
-ブラウザの中でVS CodeとGitHub Copilotを使う手順です。PCへのNode.jsのインストールは不要です。企画から公開まで、次の順に進めます。
+ブラウザの中でVS CodeとGitHub Copilotを使う手順です。PCへのNode.jsのインストールは不要です。Codespace内のSWA CLIエミュレーターで動作確認し、必要になったらAzure Static Web Appsへ公開します。
 
 **企画 → 環境準備 → 計画 → 実装と検証 → チームで確認 → 公開**
 
@@ -33,7 +33,11 @@ npm run dev
 
 Node.jsは **24.x** を使います。最後のコマンドはサーバーを動かし続けるので、ターミナルは開いたままにします。
 
-画面下部の **Ports** から **5173 → Open in Browser** を選びます。ポートが表示されない場合は **Forward a Port** で `5173` を追加します。アプリが表示されたら準備完了です。このプレビューURLはCodespaceの起動中に使う確認用です。公開URLは最後に作ります。
+画面下部の **Ports** から **4280 → Open in Browser** を選びます。ポートが表示されない場合は **Forward a Port** で `4280` を追加します。アプリが表示されたら準備完了です。
+
+`npm run dev` はSWA CLIと、その背後で画面を動かすViteを起動します。確認には **4280** のURLを使います。Viteの5173を直接開くとSWA CLIを経由しません。仕組みとAPIを追加するときの手順は[共通のローカル開発手順](common/local-development.md)を参照してください。
+
+転送ポートは **Private** のまま使います。このURLはCodespaceとサーバーの起動中に使う確認用で、停止するとアクセスできません。チームの学生に試してもらうときは、ログイン済みの同じPCで交代して操作できます。継続して使える公開URLが必要になったら、最後のAzureへの公開へ進みます。
 
 ## 3. 作業用ブランチと資料を準備する
 
@@ -104,7 +108,7 @@ docs/product.md、docs/tasks.md、docs/verification.mdと現在の変更を確�
 
 ## 6. 自分たちでも操作する
 
-[確認の進め方](common/verification.md)を開き、実装した人とは別の学生が5173のアプリを別タブで操作します。全画面のボタン・移動・戻る操作に加え、空の状態、入力ミス、スマートフォン幅を確認し、実際の結果を記録します。
+[確認の進め方](common/verification.md)を開き、実装した人とは別の学生が4280の転送URLでアプリを操作します。同じPCで交代して確認して構いません。全画面のボタン・移動・戻る操作に加え、空の状態、入力ミス、スマートフォン幅を確認し、実際の結果を記録します。
 
 ブラウザ版Codespacesでは、VS Code Desktopの内蔵Browser Toolsと同じ機能が使えることを前提にしません。AIによる画面確認が使えなくても、**Playwrightのテスト＋人のブラウザ操作**で進められます。MCPの追加は必須ではありません。
 
@@ -123,7 +127,7 @@ npx playwright install --with-deps chromium
 
 テストは学生のアプリに合わせて更新します。教材の初期テストだけの成功を、チームの完成条件の達成とは扱いません。
 
-## 7. 保存して公開する
+## 7. 保存し、必要になったら公開する
 
 Copilotに「意図した変更だけを確認し、コミットしてこのブランチをpushする手順を案内して」と頼みます。自分で行う場合は、差分を確認してから必要なファイルをステージし、コミットします。
 
@@ -138,7 +142,7 @@ git diff
 git push -u origin feat/first-demo
 ```
 
-GitHubのチームリポジトリで **Compare & pull request** を開き、`main` へのPRを作ります。チームで変更とCIの結果を確認してマージしたら、[共通の公開手順](common/publish.md)へ進みます。公開は **Deploy to GitHub Pages** を手動実行します。
+GitHubのチームリポジトリで **Compare & pull request** を開き、`main` へのPRを作ります。チームで変更とCIの結果を確認してマージします。Codespacesでの開発・動作確認までなら、Azureへのデプロイは不要です。継続して使えるURLが必要になったら、[Azure Static Web Appsへの公開手順](common/publish.md)へ進みます。公開後も実際のURLで動作を確認します。
 
 作業を終えたら、[Codespaces一覧](https://github.com/codespaces)のメニューから **Stop codespace** を選びます。ブラウザタブを閉じるだけでは、直ちに停止するとは限りません。
 
@@ -147,7 +151,8 @@ GitHubのチームリポジトリで **Compare & pull request** を開き、`mai
 | 状況 | 次にすること |
 | --- | --- |
 | Node.jsが24.xではない | `.devcontainer/`を使って作成したCodespaceか確認。運営に環境の再構築を相談する |
-| プレビューが開かない | `npm run dev`が動いているか、Portsの5173を開いているか確認する |
+| プレビューが開かない | `npm run dev`が動いているか、Portsの4280を開いているか確認する。PrivateのURLはCodespaceを使っているアカウントで開く |
+| Codespaceの停止後にURLが開かない | 開発中の確認用URLのため、Codespaceを再開して`npm run dev`を実行する。継続的な公開はAzureへの公開手順を使う |
 | Copilotが資料を見つけない | ファイルを保存し、`docs/product.md`などのパスを明記する |
 | テストが失敗する | エラー本文と、どの操作が期待と違ったかをCopilotへ渡す |
 | CodespacesやCopilotの利用上限 | アカウントの残量を確認し、運営へ相談。途中のファイルを保存する |

@@ -12,15 +12,15 @@
 | モデル | 実際の学生アカウントでAutoを選んで応答できること。特定モデル名を操作手順へ追加しない |
 | 残量 | CopilotとCodespacesの現在の残量・制限を各自のアカウント画面で確認する |
 | チームのリポジトリ | テンプレートから作成でき、必要なメンバーがアクセスできること |
-| Codespaces | 新規作成からNode 24、npm ci、5173のプレビューまで通ること |
+| Codespaces | 新規作成からNode 24、npm ci、SWA CLIの4280のプレビューまで通ること |
 | Copilot app | Git・Node 24・Appの準備、clone、設定受け入れ、Setup、Runが通ること |
 | 資料の引き継ぎ | 企画メモと画面PNGから、product・tasksの整理ができること |
 | 検証 | checkとPlaywright ChromiumのE2Eを実行できること。人のブラウザ確認も行うこと |
-| 公開 | PR→CI→マージ→GitHub Pagesの手動実行→公開URL確認まで通ること |
+| 公開 | SWA CLIで確認・発表できること。Azure公開を行う場合はPR→CI→マージ→SWA公開→公開URL確認まで通ること |
 
 利用枠の数値はアカウントや提供条件で変わるため、過去の配布資料の数字だけで参加可否を判断しません。[Copilot設定](https://github.com/settings/copilot)、GitHubの **Settings → Billing and licensing**、[Codespaces一覧](https://github.com/codespaces)と[公式プラン説明](https://docs.github.com/en/copilot/get-started/plans)を確認します。
 
-Azureクレジットは標準経路に不要です。外部APIや共有データベースを追加するチームだけ、必要性、利用条件、費用、秘密情報の扱いを個別に確認します。クレジットの有無から、特定のAPIやモデルが必ず使えるとは判断しません。
+SWA CLIだけのローカル確認にAzureクレジットは不要です。Azure公開や外部API・共有DBを使うチームは、必要性、利用条件、費用、秘密情報の扱いを確認します。クレジットの有無から、特定のAPIやモデルが必ず使えるとは判断しません。
 
 ## 両経路で行うリハーサル
 
@@ -32,11 +32,12 @@ Azureクレジットは標準経路に不要です。外部APIや共有データ
 4. `npm run check`、`npm run test:e2e`、人の操作確認を実施します。
 5. 仕様を一つ変更し、product、tasks、テスト、実装、verificationが一致するところまで戻します。
 6. sessionを終了して再開し、保存されたファイルから作業を継続できるか確認します。
-7. CIと公開まで確認します。GitHub PagesのURLを別のブラウザで開き直します。
+7. Copilot appで変更をpushし、Codespacesで同じブランチをpullして4280から確認する経路も通します。コミット番号と画面が一致することを確認します。
+8. CIを確認します。Azure公開を行う場合はSWAの公開URLを別のブラウザで開き直し、APIや実際の認証も確かめます。
 
 確認の記録には、日付、OS、VS Code／Appのバージョン、アカウントのプラン、実行経路、成功した項目、失敗・未確認項目を残します。アクセストークン、個人のメールアドレス、私的な会話の原文は記録しません。
 
-**このチェックリストを掲載しただけではリハーサル完了ではありません。** リポジトリ内でのbuild・テスト成功と、学生アカウントでのCopilot操作、Codespaces、App、GitHub Pages公開の成功は別々に記録します。未実施の項目は「未確認」のまま扱います。
+**このチェックリストを掲載しただけではリハーサル完了ではありません。** リポジトリ内でのbuild・テスト成功と、学生アカウントでのCopilot操作、Codespaces、App、Azure Static Web Apps公開の成功は別々に記録します。未実施の項目は「未確認」のまま扱います。
 
 ## 当日の支援
 

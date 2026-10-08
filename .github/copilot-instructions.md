@@ -7,17 +7,18 @@
 - 目的・対象ユーザー・完成条件・対象外の正本は `docs/product.md`。未入力欄を事実として扱わず、参考例をチームの企画として採用しない。
 - 作業単位、依存、現在の進捗は `docs/tasks.md`。確認結果と未確認事項は `docs/verification.md`。
 - 元の画面案や企画メモは `docs/source/`。関係する資料だけ読む。
-- 共通の進め方は `docs/common/build-loop.md`。公開を依頼されたときは `docs/common/publish.md`。
+- 共通の進め方は `docs/common/build-loop.md`。実行環境は `docs/common/local-development.md`。公開を依頼されたときは `docs/common/publish.md`。
 
 ## 実行環境
 
 Node.js 24 LTS、npm、`package-lock.json` を使用します。
 
 - 初回準備: `npm ci`
-- 起動: `npm run dev`
+- 起動: `npm run dev`（SWA CLIの4280を開く。Viteの5173は内部用）
 - 静的チェック・型チェック・本番ビルド: `npm run check`
 - ブラウザ準備: `npx playwright install chromium`（Linuxの依存ライブラリが足りない場合は `--with-deps`）
-- ブラウザテスト: `npm run test:e2e`
+- ブラウザテスト: `npm run test:e2e`（ビルド後にSWAの4281で実行。API追加時は起動・テストにも接続設定を追加）
+- Copilot appからCodespacesへ渡す場合は同じブランチをpush/pullし、コミット番号を照合する。未保存・未pushの変更が自動同期されるとは扱わない。
 
 ## 作業と完了
 

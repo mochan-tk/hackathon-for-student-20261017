@@ -44,17 +44,17 @@ VS Codeの[内蔵Browser Tools](https://code.visualstudio.com/docs/agents/run/br
 
 Copilot appから既存のCodespaceへの直接接続は未検証です。AppのCloud sandboxは[Public Preview](https://docs.github.com/en/copilot/how-tos/github-copilot-app/agent-sessions#using-cloud-and-local-sandboxes)で、標準経路から外しています。
 
-## Figma・公開・発展機能
+## Figma・動作確認・公開
 
 - Figmaは画面PNGと操作・遷移のメモで引き継げます。[Remote MCP](https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/)の接続は任意です。利用条件は[Figmaのプラン・seat・読み取り上限](https://developers.figma.com/docs/figma-mcp-server/rate-limits-access/)に依存します。Copilot Studentの権利からFigma Educationの有効化を推定しません。
-- 公開は[GitHub PagesのActionsによるデプロイ](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)を使います。教材の公開ワークフローは手動実行です。CodespacesのプレビューURLと公開URLは役割が異なります。
+- 動作確認は[SWA CLI](https://azure.github.io/static-web-apps-cli/docs/cli/swa-start/)で行い、PCとCodespacesの4280から開きます。Codespacesは[ポート転送](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace)を使います。公開先は[Azure Static Web Apps](https://learn.microsoft.com/en-us/azure/static-web-apps/overview)です。プレビューURLと継続して共有する公開URLを区別します。
 - [Dynamic workflows](https://docs.github.com/en/copilot/concepts/agents/dynamic-workflows)と[GitHub Agentic Workflows](https://github.blog/changelog/2026-06-11-github-agentic-workflows-is-now-in-public-preview/)は、基準日時点ではPublic Preview。並列エージェント、定期自動化、全自律実行は教材の必須条件にしません。
-- Azureの利用は発展課題です。標準の企画・実装・確認・GitHub Pages公開にAzureクレジットは必要ありません。
+- SWA CLIだけのローカル確認にAzureリソースやクレジットは不要です。Azureへの公開や外部サービスの利用には、対象サブスクリプションの権利・利用枠を確認します。共有データやAIが企画の必須機能なら、当初から実装・検証対象に含めます。
 
 ## 検証の区別
 
 教材コードのローカルbuildやテスト、運営のアカウントでの操作、学生の実アカウントでの操作は、別の確認です。公式Docsに対応と書かれていても、学生の権利・残量・PC・ネットワークを含む当日の成功を保証するものではありません。
 
-学生アカウントでの両経路の起動、Skillsの呼び出し、Copilotの往復、GitHub Pages公開は、運営のリハーサルで確認し、実施日と結果を残してください。実施するまでは未確認です。[運営向けチェック](facilitator.md)を使います。
+学生アカウントでの両経路の起動、Skillsの呼び出し、Copilotの往復、Appで編集してCodespacesで実行する経路、Azureへの公開は、運営のリハーサルで確認し、実施日と結果を残してください。実施するまでは未確認です。[運営向けチェック](facilitator.md)を使います。
 
 [READMEへ戻る](../README.md)

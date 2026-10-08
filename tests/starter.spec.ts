@@ -22,3 +22,13 @@ test('スターターが起動し、入力したタイトルを表示できる',
   expect(hasHorizontalOverflow).toBe(false)
   expect(pageErrors).toEqual([])
 })
+
+test('SWAで画面URLを直接開け、存在しないアセットはHTMLへ変換されない', async ({ page, request }) => {
+  await page.goto('/demo/direct-link')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('ハッカソン開発スターター.')
+  await page.reload()
+  await expect(page.getByText('準備できました')).toBeVisible()
+
+  const missingAsset = await request.get('/assets/missing.js')
+  expect(missingAsset.status()).toBe(404)
+})

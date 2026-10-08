@@ -1,6 +1,6 @@
 # GitHub Copilot appで作る
 
-GitHub Copilot appをPCに入れ、手元のファイルで開発する手順です。企画資料、完成条件、テスト、公開先は[Codespacesの手順](codespaces.md)と共通です。
+GitHub Copilot appをPCに入れ、手元のファイルを編集する手順です。動作確認は、PC上のSWA CLIエミュレーターで行うか、GitHubへpushした変更をCodespacesで取り込んで行うかを選べます。企画資料、完成条件、テスト、公開先は[Codespacesの手順](codespaces.md)と共通です。
 
 **企画 → PCの準備 → 計画 → 実装と検証 → チームで確認 → 公開**
 
@@ -25,7 +25,7 @@ Node.jsが **24.x** と表示されれば、この教材の指定バージョン
 
 GitHubの[Copilot設定](https://github.com/settings/copilot)で利用権利を確認します。GitHub Proへの加入とCopilot Studentの有効化は別です。
 
-この手順のアプリと開発サーバーはPC上で動きます。Copilot appから既存のCodespaceへ直接接続する手順は、この教材では検証していません。
+Copilot appによる編集はPC上で行います。Codespacesで動作確認する場合は、PCとCodespacesの間をGitHubのコミットで引き継ぎます。Copilot appから既存のCodespaceへ直接接続する手順ではありません。
 
 ## 2. チームのリポジトリをAppに追加する
 
@@ -39,23 +39,29 @@ Autoが表示されない、利用権利や利用上限の表示が出る場合�
 
 最初は一人が操作し、ほかのメンバーが企画・画面・動作を確認すると進めやすくなります。各自で作業する場合はGitHubからそれぞれcloneし、別のブランチを使います。
 
-## 3. SetupとRunで起動を確認する
+## 3. 作業ブランチと実行場所を準備する
 
-リポジトリ設定の確認が表示されたら、[.github/github-app.yml](../.github/github-app.yml)を確認して受け入れます。教材の **Setup** は依存関係のインストール、**Run** は開発サーバーの起動に使います。
+リポジトリ設定の確認が表示されたら、[.github/github-app.yml](../.github/github-app.yml)を確認して受け入れます。教材の **Setup** は依存関係のインストール、**Run** はSWA CLIとViteの起動に使います。
 
-1. **Setup** が成功したことを確認します。自動で実行されなかった場合は、Terminalを開いて `npm ci` を実行します。
-2. **Run** を実行します。コマンドは `npm run dev` です。
-3. Browserパネルが開き、アプリが表示されたら準備完了です。自動表示されない場合は、Terminalに表示された `http://localhost:5173` を開きます。
-
-Terminalは、session開始後にチャットで `/terminal` と入力しても開けます。サーバーを動かしているTerminalは開いたままにします。
-
-別のTerminalで作業用ブランチを作ります。
+Terminalを開き、作業用ブランチを作ります。session開始後にチャットで `/terminal` と入力しても開けます。
 
 ```sh
 git switch -c feat/first-demo
 ```
 
 すでに同名のブランチがある場合は `git switch feat/first-demo` で戻ります。Appが別の作業用ブランチを作成済みの場合は、そのブランチを使って構いません。
+
+### PCで動作確認する場合
+
+1. **Setup** が成功したことを確認します。自動で実行されなかった場合は、Terminalで `npm ci` を実行します。
+2. **Run** を実行します。コマンドは `npm run dev` です。
+3. Browserパネルが開き、アプリが表示されたら準備完了です。自動表示されない場合は、`http://127.0.0.1:4280` を開きます。
+
+サーバーを動かしているTerminalは開いたままにします。確認にはSWA CLIの **4280** を使い、背後のViteの5173を直接開かないようにします。APIの追加などは[共通のローカル開発手順](common/local-development.md)を参照してください。
+
+### Codespacesで動作確認する場合
+
+PCでのRunを省き、下の[Codespacesへ変更を渡して確認する手順](#codespacesへ変更を渡して確認する)を使います。最初は未変更のスターターで一度起動を確かめ、その後も変更ごとに同じ手順で更新します。Copilotには「編集はこのPC、実行とブラウザ確認はCodespacesで行う。実行できない確認は未確認として、こちらへコマンドを案内して」と伝えます。
 
 ## 4. 資料を渡してPlanで計画する
 
@@ -99,6 +105,8 @@ verify-goalスキルで完成条件と実装を照合し、確認結果をdocs/v
 
 `verify-goal` が認識されない場合は、`.github/skills/verify-goal/SKILL.md` を読むよう伝えます。必要な確認に答え、**Changes** で変更内容を確認しながら進めます。
 
+Codespacesで実行する場合は、「実行コマンドはCodespacesでこちらが実行するので案内し、渡した結果を確認してから修正を続けてください」と添えます。結果を受け取る前に、テスト成功や完成条件の達成として記録しないようにします。
+
 途中で終了した場合は、同じsessionで次を送ります。新しいsessionを作った場合も、保存済みの3ファイルが引き継ぎに使えます。
 
 ```text
@@ -108,9 +116,11 @@ docs/product.md、docs/tasks.md、docs/verification.mdと現在の変更を確�
 
 教材の「ゴールまで進める」は、この確認と修正の繰り返しを指します。`/goal` の対応や、session終了後の自動再開を前提にしていません。
 
-## 6. Browserでチームの完成条件を確認する
+## 6. チームの完成条件を確認する
 
-[確認の進め方](common/verification.md)に沿って、実装した人とは別の学生が **Run → Browser** で実際に操作します。全画面のボタン・移動・戻る操作に加え、空の状態、入力ミス、スマートフォン幅を確認し、実際の結果を記録します。見た目を直したい場合は、Browserの **Pick & Polish** で要素を選んで伝えることもできます。
+### PCで確認する
+
+[確認の進め方](common/verification.md)に沿って、実装した人とは別の学生が **Run → Browser** の `http://127.0.0.1:4280` で実際に操作します。同じPCで交代して構いません。全画面のボタン・移動・戻る操作に加え、空の状態、入力ミス、スマートフォン幅を確認し、実際の結果を記録します。見た目を直したい場合は、Browserの **Pick & Polish** で要素を選んで伝えることもできます。
 
 Terminalで次の確認も行います。
 
@@ -129,15 +139,51 @@ LinuxでOSのライブラリ不足が出た場合は、運営とエラーを確�
 
 MCPの追加は必須ではありません。AIがBrowserを操作できない場合でも、Playwrightのテストと人の操作確認で進められます。教材の初期テストが成功しても、チームで決めた完成条件は別途確認します。
 
+### Codespacesへ変更を渡して確認する
+
+PCとCodespacesのファイルは自動同期されません。**同じチームリポジトリの同じブランチ**を使い、変更をGitHubへ送ってから取り込みます。以下の `feat/first-demo` は、実際に使っているブランチ名に置き換えてください。
+
+1. PCのAppで **Changes** を確認し、意図した変更をコミットします。未コミットの変更や、まだpushしていないコミットはCodespacesへ届きません。
+2. PCのTerminalでブランチ名を確認し、GitHubへ送ります。最後に表示されるコミット番号を控えます。
+
+   ```sh
+   git branch --show-current
+   git push -u origin feat/first-demo
+   git rev-parse --short HEAD
+   ```
+
+3. GitHubで**同じチームリポジトリ**を開き、**Code → Codespaces** からCodespaceを作成するか、既存のものを開きます。環境準備は[Codespacesの手順](codespaces.md#2-codespaceを開く)を参照してください。
+4. Codespacesで前回のサーバーが動いていれば、そのTerminalで `Ctrl+C` を押して止めます。次に `git status` を実行します。未コミットの変更がある場合は、内容を確認して保存・コミットするか運営へ相談し、先に作業ツリーを整理します。変更を消すための `reset --hard` や強制的な切り替えは行いません。変更がなければ、次を実行します。
+
+   ```sh
+   git fetch origin
+   git switch feat/first-demo
+   git pull --ff-only
+   git branch --show-current
+   git rev-parse --short HEAD
+   ```
+
+5. PCとCodespacesで**ブランチ名とコミット番号が一致**することを確認します。`pull --ff-only` が失敗した場合は、双方に別の変更がある可能性があるため、その出力をCopilotか運営へ渡して解決します。一致したらCodespacesで起動します。
+
+   ```sh
+   npm ci
+   npm run dev
+   ```
+
+6. **Ports → 4280 → Open in Browser** を開いて操作します。ポートの公開範囲は **Private** のままで構いません。別の学生もログイン済みの同じPCで交代して確認できます。Codespaceやサーバーを停止すると、この確認用URLは使えなくなります。
+7. Codespacesの別Terminalで `npm run check` と `npm run test:e2e` を実行します。結果・エラー全文・実際の操作結果・確認したコミット番号をPCのCopilot appへ渡し、修正と `docs/verification.md` への記録を依頼します。スクリーンショットも添えられます。修正後は、再びコミット・pushから繰り返します。
+
+この経路では、通常はPC側で編集し、Codespaces側で実行・確認すると変更を追いやすくなります。Codespacesでもファイルを編集した場合は、そちらの変更もコミット・pushし、PCの作業ツリーに未コミットの変更がないことを確認して `git pull --ff-only` で取り込んでから編集を再開します。
+
 ## 7. 変更を保存し、PRから公開へ進む
 
 1. **Changes** で、採用したい変更になっているか確認します。
 2. Copilotへ「意図した変更だけをコミットして現在の作業ブランチをpushし、mainへのPRを作る手順を案内して」と頼みます。コマンドの確認が表示されたら、対象ブランチとファイルを確認します。
 3. **Create PR** が表示されている場合は、そこからPRを作れます。表示されない場合は、push後にGitHubのチームリポジトリで **Compare & pull request** を使います。
 4. チームで差分、確認結果、CIを確認して `main` へマージします。
-5. [共通の公開手順](common/publish.md)で **Deploy to GitHub Pages** を手動実行し、公開URLで改めて操作します。
+5. 継続して使えるURLが必要になったら、[Azure Static Web Appsへの公開手順](common/publish.md)へ進み、公開URLで改めて操作します。PCやCodespacesでの動作確認までなら、Azureへのデプロイは不要です。
 
-サーバーを終了するときは、動かしているTerminalで `Ctrl+C` を押します。
+サーバーを終了するときは、動かしているTerminalで `Ctrl+C` を押します。Codespacesを使った場合は、[Codespaces一覧](https://github.com/codespaces)から **Stop codespace** も選びます。
 
 ## 発展：ほかの実行場所
 

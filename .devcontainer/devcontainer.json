@@ -3,11 +3,19 @@
   "image": "mcr.microsoft.com/devcontainers/javascript-node:24-bookworm",
   "remoteUser": "node",
   "postCreateCommand": "npm ci && npx playwright install --with-deps chromium",
-  "forwardPorts": [5173],
+  "forwardPorts": [4280],
   "portsAttributes": {
-    "5173": {
-      "label": "チームのアプリ",
+    "4280": {
+      "label": "チームのアプリ（SWA）",
       "onAutoForward": "openBrowser"
+    },
+    "5173": {
+      "label": "Vite（SWAから接続）",
+      "onAutoForward": "ignore"
+    },
+    "4281": {
+      "label": "ビルド後の確認（SWA）",
+      "onAutoForward": "silent"
     }
   },
   "customizations": {
