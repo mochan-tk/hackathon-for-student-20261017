@@ -4,8 +4,14 @@
 
 ## 教材に採用した考え方
 
+各工夫と教材のファイルの対応は[Copilotと開発する3つの工夫](common/ai-development-tips.md)にまとめています。プロンプト・コンテキスト・ハーネスを、重なり合う設計の観点として説明しています。以下のプロンプト・コンテキストの資料とOpenAIのbest practicesは10月9日に確認しました。
+
 | 公式情報 | 教材への反映 |
 | --- | --- |
+| [GitHub：Prompt engineering](https://docs.github.com/en/copilot/concepts/prompting/prompt-engineering) | 目的・範囲・入力例・期待結果を具体的に伝える。長い固定文を毎回繰り返す代わりに、今回の作業を指定する |
+| [Anthropic：Context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) | 必要な情報を選び、参照先と構造化した記録から必要時に読み取る。企画・作業・検証の正本と引き継ぎに反映 |
+| [VS Code：Context engineering guide](https://code.visualstudio.com/docs/agents/guides/context-engineering-guide) | 共通指示を短く保ち、詳しい文書を参照する。繰り返した失敗を見て必要な指示だけを足す |
+| [OpenAI：Best practices](https://learn.chatgpt.com/guides/best-practices) | 文脈・再利用する指示・実行と検証を組み合わせる。教材ではCopilot用の指示・Skills・コマンドを使い、同じ失敗を適切な場所の改善へ戻す |
 | [GitHub：タスクを任せる際のbest practices](https://docs.github.com/en/copilot/tutorials/cloud-agent/get-the-best-results) | 課題、範囲、受け入れ条件を明確にし、実行・テスト方法をリポジトリに置く |
 | [VS Code：AIを使う際のbest practices](https://code.visualstudio.com/docs/agents/best-practices) | 小さいタスク、計画、実装、検証、差分レビューの繰り返し |
 | [GitHub Spec Kit：SDDの進め方](https://github.github.com/spec-kit/quickstart.html) | 仕様→計画→タスク→実装→仕様との照合。未達を次のタスクへ戻す |

@@ -17,7 +17,7 @@
 | APIの不正入力 | 開発・本番サーバーへ不正JSON、100KB超のJSONを送信 | 400・413を確認 |
 | GitHub Actions設定 | `actionlint` | エラーなし |
 | OIDC初期設定の表示処理 | ワークフロー内のJavaScriptを旧Subject・ID付きSubject・HTTPエラーでオフライン実行 | 想定どおり。Issuer・Subject・Audienceだけを表示し、JWTや要求トークン・他のclaimを出力しない |
-| 文書・設定 | 21個のMarkdownの相対リンク・見出し、npmスクリプト参照、devcontainer JSON、Skillsのfrontmatter | 問題なし。外部リンクも公式ページまたはログイン画面への到達を確認 |
+| 文書・設定 | Markdownの相対リンク・見出し、npmスクリプト参照、devcontainer JSON、Skillsのfrontmatter | 問題なし。外部リンクも公式ページまたはログイン画面への到達を確認 |
 | 依存関係の監査 | `npm audit` | 開発依存を含め指摘0件 |
 
 本番用DockerfileはNode.js 24、production依存、非root起動で、8080に画面とAPIを配信します。作成環境には稼働中のDockerデーモンがないため、ローカルでのDockerビルド・実行は未実施です。Linux/amd64の本番コンテナは、次のGitHub Actionsで実行して確認しました。
@@ -47,6 +47,12 @@ Copilot appのGUI手順は、[v1.1.26のbranch actions追加](https://github.com
 | Azure初回設定に所有者のプラン・プロバイダー登録・入力欄の説明が不足 | Private OrganizationのTeam以上の要件、Microsoft.App登録、RegistryとImageの入力を明記 |
 
 実行できた確認は上の表に記録しています。OIDC表示処理のオフライン確認は、GitHubからの実トークン発行やAzureへのログインの成功を意味しません。
+
+## 3つの開発の工夫と失敗時の証拠
+
+10月9日に[プロンプト・コンテキスト・ハーネスの解説](common/ai-development-tips.md)を追加しました。README・実装ループ・運営の振り返りから参照できます。既存の仕組みとの対応、短い依頼例、失敗の原因に応じた改善先、指示で決める運用と自動実行される処理の違いを記載しています。
+
+CIのブラウザテストが失敗した場合、`test-results/`を`playwright-failure-evidence`として3日保存する設定を追加しました。独立した一時テストで失敗を起こし、既存のPlaywright設定からスクリーンショットと`trace.zip`が生成されることを確認しました。ワークフローの構文検証も成功しています。実際のGitHub Actionsで失敗時Artifactを取得する一連の操作は未実施です。
 
 ## 配布前に残っている確認
 
