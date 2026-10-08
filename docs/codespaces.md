@@ -7,7 +7,7 @@
 ## 1. チームのリポジトリを作る
 
 1. [企画の進め方](common/ideation.md)に沿って、誰の何を解決するかをチームで決めます。
-2. 教材のGitHubページで **Use this template → Create a new repository** を選びます。
+2. [教材のGitHubページ](https://github.com/mochan-tk/hackathon-for-student-20261017)で **Use this template → Create a new repository** を選びます。
 3. チームの代表者のアカウント、または利用できるOrganizationを所有者にして作成します。チーム全員が編集する場合は、リポジトリの **Settings → Collaborators** からメンバーを追加します。
 4. 以降は、作成したチームのリポジトリを開いて作業します。
 

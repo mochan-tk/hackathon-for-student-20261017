@@ -30,7 +30,7 @@ GitHubの[Copilot設定](https://github.com/settings/copilot)で利用権利を�
 ## 2. チームのリポジトリをAppに追加する
 
 1. [企画の進め方](common/ideation.md)で、誰の何を解決するかをチームで決めます。
-2. 教材のGitHubページで **Use this template → Create a new repository** を選び、チーム用リポジトリを作ります。すでに作ったものがある場合は、そのリポジトリを使います。
+2. [教材のGitHubページ](https://github.com/mochan-tk/hackathon-for-student-20261017)で **Use this template → Create a new repository** を選び、チーム用リポジトリを作ります。すでに作ったものがある場合は、そのリポジトリを使います。
 3. Copilot appを開き、**Sign in to GitHub** で今回使う学生アカウントにログインします。
 4. **Projects** 横の追加ボタンから **GitHub repository** を選び、チームのリポジトリを選択してcloneします。
 5. そのプロジェクトで新しいsessionを作り、実行場所を **Local repository**、モードを **Interactive**、モデルを **Auto** にします。特定モデルを選ぶ手順はありません。

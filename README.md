@@ -11,7 +11,7 @@
 | Codespaces + VS Code Copilot Chat | [Codespacesで進める](docs/codespaces.md) | GitHubとCopilotが使えるアカウント、ブラウザ |
 | GitHub Copilot app | [Copilot appで進める](docs/copilot-app.md) | 同じアカウント、Git、Node.js 24 LTS、Copilot app |
 
-チームごとにこのテンプレートからリポジトリを作ります。GitHub Copilot StudentとGitHub Proを利用する想定です。権利の有効化と利用残量は事前にアカウント画面で確認してください。
+チームごとに[このテンプレートからリポジトリを作成](https://github.com/mochan-tk/hackathon-for-student-20261017/generate)します。GitHub Copilot StudentとGitHub Proを利用する想定です。権利の有効化と利用残量は事前にアカウント画面で確認してください。
 
 ## 企画から公開まで
 
