@@ -18,7 +18,7 @@ Node.js 24 LTS、npm、`package-lock.json` を使用します。
 - 静的チェック・型チェック・本番ビルド: `npm run check`
 - ブラウザ準備: `npx playwright install chromium`（Linuxの依存ライブラリが足りない場合は `--with-deps`）
 - ブラウザテスト: `npm run test:e2e`（ビルド後にSWAの4281で実行。API追加時は起動・テストにも接続設定を追加）
-- Copilot appからCodespacesへ渡す場合は、変更内容・コミットメッセージ案・Codespacesでの確認コマンドを示し、学生がAppの画面でcommit・pushして確認結果を返すまで次の修正を待つ。明示的な依頼がなければcommit・pushを自動実行しない。同じブランチをpush/pullし、コミット番号を照合する。未保存・未pushの変更が自動同期されるとは扱わない。
+- Copilot appからCodespacesへ渡す場合は、変更内容・コミットメッセージ案・Codespacesでの起動とテストのコマンドを示し、学生がAppの画面でcommit・pushして確認結果を返すまで次の修正を待つ。明示的な依頼がなければcommit・pushを自動実行しない。初回はpush済みの作業ブランチからCodespaceを作成し、既存Codespaceの再利用時は同じブランチでGUIのPullを使う。Gitの確認コマンドやコミット番号の照合を通常の手順に追加しない。未保存・未pushの変更や、GitHubへのpushが既存Codespaceへ自動反映されるとは扱わない。
 
 ## 作業と完了
 

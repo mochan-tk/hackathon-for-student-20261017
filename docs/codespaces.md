@@ -20,6 +20,8 @@
 3. Copilot Chatを開き、今回使う学生アカウントでサインインしていることを確認します。
 4. GitHubの[Copilot設定](https://github.com/settings/copilot)で **Copilot Student** の利用権利を確認します。Chatのモデルは **Auto** を使います。特定モデルを選ぶ手順はありません。
 
+Copilot appからpushした変更を確認する場合は、上の `main` の代わりに、その作業ブランチをGitHubで選んでからCodespaceを作成します。
+
 Copilotが使えない、Autoが表示されない、利用上限の表示が出る場合は、アカウント名と表示内容を運営に見せてください。GitHub Proへの加入とCopilot Studentの有効化は別です。
 
 **Terminal → New Terminal** からターミナルを開き、次を一行ずつ実行します。

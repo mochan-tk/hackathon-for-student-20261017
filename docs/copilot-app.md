@@ -103,7 +103,8 @@ docs/product.mdとdocs/tasks.mdを読み、最初の未完了タスクから実�
 実行場所がPCの場合は、実装後にnpm run checkとnpm run test:e2eを実行してください。
 実行場所がCodespacesの場合は、確認できる小さな変更ごとに、変更内容とコミットメッセージ案を示してください。
 commit・pushはこちらがCopilot appの画面で行うので、自動実行せず待ってください。
-Codespacesでこちらが実行するpullと確認コマンドも案内し、結果を渡すまで次の修正を待ってください。
+Codespacesでの起動・テストのコマンドも案内し、結果を渡すまで次の修正を待ってください。
+変更の取り込みは教材のGUI手順で行います。Gitの確認コマンドやコミット番号の照合は通常の手順に追加しないでください。
 verify-goalスキルで完成条件と実装を照合し、確認結果をdocs/verification.mdへ記録してください。
 未達の条件はdocs/tasks.mdへ戻して、範囲内の修正と再確認を続けてください。
 人の判断、認証、外部サービスの準備が必要なら、その理由と次の操作を知らせてください。
@@ -150,31 +151,25 @@ MCPの追加は必須ではありません。AIがBrowserを操作できない�
 
 この手順は、実装中に何度も使います。**Codespacesで確かめたい変更ができたら、その場で学生がCopilot appの画面からcommit・pushします。アプリ全体の完成や、最後のPR作成まで待つ必要はありません。** このcommit・pushは、動作確認するコードをCodespacesへ渡すためのものです。確認結果は実行後に記録し、`main`への統合は手順7で行います。
 
-PCとCodespacesのファイルは自動同期されません。**同じチームリポジトリの同じ作業ブランチ**を使います。以下の `feat/first-demo` は、実際に使っているブランチ名に置き換えてください。
+PCとCodespacesのファイルは自動同期されません。**同じチームリポジトリの同じ作業ブランチ**を使います。
 
 1. PC側の編集が終わったらファイルを保存し、Appの **Changes** を開きます。入力欄の上に見当たらない場合は、右パネルの **＋ → Changes** から開けます。表示する変更を **Uncommitted** に切り替え、ファイルごとの差分と、表示中の作業ブランチ名を確認します。
 2. **Changesのブランチ操作メニュー（branch actions）**を開き、**Commit** の操作を選びます。確認画面が出たら、対象の変更とコミットメッセージを確認して実行します。メッセージは「企画と完成条件を記録」「入力フォームを追加」のように変更内容が分かるものにします。Copilotにはメッセージ案を相談できます。すでにコミット済みの場合は、新しいcommitは不要なので次へ進みます。
 3. **commitしたら、同じメニューから続けてすぐにPushの操作を選びます。** 初回にブランチの公開を求められたら、チームのリポジトリへ現在の作業ブランチを公開します。Appの処理完了を待ちます。**CommitはPC内への記録、PushはGitHubへの送信**です。commitだけではCodespacesへ届きません。
-4. ブラウザでGitHubの**同じチームリポジトリ**を開き、ブランチ選択欄で作業ブランチを選びます。Appの **Changes** も **Uncommitted** から **Last commit** に切り替えます。両方の最新コミットメッセージと短いコミット番号（SHA）が一致することを確認し、ブランチ名と番号を控えます。
-5. **ここからはCodespacesで動作確認する場合の操作です。** GitHubの **Code → Codespaces** からCodespaceを作成するか、既存のものを開きます。環境準備は[Codespacesの手順](codespaces.md#2-codespaceを開く)を参照してください。以降のコマンドは**CodespacesのTerminal**で実行します。前回のサーバーが動いていれば、そのTerminalで `Ctrl+C` を押して止めます。次に `git status` を実行します。未コミットの変更がある場合は、内容を確認して保存・コミットするか運営へ相談し、先に作業ツリーを整理します。変更を消すための `reset --hard` や強制的な切り替えは行いません。変更がなければ、次を実行します。
-
-   ```sh
-   git fetch origin
-   git switch feat/first-demo
-   git pull --ff-only
-   git branch --show-current
-   git rev-parse --short HEAD
-   ```
-
-6. GitHubで控えたものとCodespacesで**ブランチ名とコミット番号が一致**することを確認します。短い番号の桁数が違う場合は、先頭の文字列が一致することを確認します。`pull --ff-only` が失敗した場合は、双方に別の変更がある可能性があるため、その出力をCopilotか運営へ渡して解決します。一致したらCodespacesで起動します。
+4. ブラウザでGitHubの**同じチームリポジトリ**を開き、ブランチ選択欄で作業ブランチを選びます。最新の変更が反映されていれば、Codespacesへ進めます。
+5. **ここからはCodespacesで動作確認する場合の操作です。** 初回は、作業ブランチを選んだまま **Code → Codespaces → Create codespace on（作業ブランチ名）** から作成します。2回目以降は、その作業ブランチの既存Codespaceを開きます。環境準備は[Codespacesの手順](codespaces.md#2-codespaceを開く)を参照してください。
+6. **既存Codespaceを使う場合だけ**、前回のサーバーが動いていればTerminalで `Ctrl+C` を押して止め、**Source Control → … → Pull** で今回pushした変更を取り込みます。新規作成直後はこの操作は不要です。
+7. **CodespacesのTerminal**で起動します。
 
    ```sh
    npm ci
    npm run dev
    ```
 
-7. **Ports → 4280 → Open in Browser** を開いて操作します。ポートの公開範囲は **Private** のままで構いません。別の学生もログイン済みの同じPCで交代して確認できます。Codespaceやサーバーを停止すると、この確認用URLは使えなくなります。
-8. Codespacesの別Terminalで `npm run check` と `npm run test:e2e` を実行します。結果・エラー全文・実際の操作結果・確認したコミット番号をPCのCopilot appへ渡し、修正と `docs/verification.md` への記録を依頼します。スクリーンショットも添えられます。修正後は、再びAppの画面でcommit・pushするところから繰り返します。
+8. **Ports → 4280 → Open in Browser** を開いて操作します。ポートの公開範囲は **Private** のままで構いません。別の学生もログイン済みの同じPCで交代して確認できます。Codespaceやサーバーを停止すると、この確認用URLは使えなくなります。
+9. Codespacesの別Terminalで `npm run check` と `npm run test:e2e` を実行します。結果・エラー全文・実際の操作結果をPCのCopilot appへ渡し、修正と `docs/verification.md` への記録を依頼します。スクリーンショットも添えられます。修正後は、再びAppの画面でcommit・pushするところから繰り返します。
+
+別のブランチで使っていたCodespaceを再利用する場合は、左下のブランチ名から今回の作業ブランチへ切り替えてからPullします。一覧に見当たらなければ、手順5の方法で作業ブランチから新規作成できます。Pullでエラーが出た場合は、その表示をCopilotか運営へ渡してください。[CodespacesのGUI操作の公式手順](https://docs.github.com/en/codespaces/developing-in-a-codespace/using-source-control-in-your-codespace#pulling-changes-from-the-remote-repository)も参照できます。
 
 このGUI手順は[Copilot app v1.1.26以降のbranch actions](https://github.com/github/app/releases/tag/v1.1.26)を前提にしています。Commit・Pushの項目は、版やブランチの状態で表記が変わります。[v1.1.27以降は対象が0件のPull・Pushは表示されません](https://github.com/github/app/releases/tag/v1.1.27)。Pushが見えないだけで送信済みとは判断せず、GitHub上のブランチと最新コミットで確認してください。メニューが見つからない場合はAppのバージョンと画面を運営に見せてください。
 

@@ -22,7 +22,7 @@ npm run dev
 
 Codespacesで4280が見えなければ **Forward a Port** で追加します。以前から開いているCodespaceでは **Codespaces: Rebuild Container** でdevcontainerの変更を反映できます。ポートは **Private** のまま使い、チーム内の手動確認は同じPCで交代して操作できます。転送URLはCodespaceとサーバーの起動中だけ使えます。
 
-Copilot appで編集し、Codespacesで実行する場合は、**確認したい変更ができるたびに学生がAppの画面でcommit・pushし、Codespacesでpullしてから確認します。** [Appのガイド](../copilot-app.md#codespacesへ変更を渡して確認する)の手順で、両環境のブランチ・コミットをそろえます。
+Copilot appで編集し、Codespacesで実行する場合は、**確認したい変更ができるたびに学生がAppの画面でcommit・pushします。** 初回はその作業ブランチからCodespaceを作成し、2回目以降はCodespacesの **Source Control → … → Pull** で変更を取り込んでから確認します。詳しくは[Appのガイド](../copilot-app.md#codespacesへ変更を渡して確認する)を参照してください。
 
 ## ビルドしたアプリとテスト
 
