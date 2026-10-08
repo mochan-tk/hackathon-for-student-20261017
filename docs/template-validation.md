@@ -17,11 +17,13 @@
 | 文書・設定 | Markdownの相対リンクとdevcontainer JSON | リンク先ファイルとJSON構文に問題なし |
 | 依存関係の監査 | `npm audit` | 開発依存を含め指摘0件 |
 
-本番用DockerfileはNode.js 24、production依存、非root起動で、8080に画面とAPIを配信します。作成環境には稼働中のDockerデーモンがないため、ローカルでのDockerビルド・実行は未実施です。GitHub ActionsにはLinux/amd64の本番コンテナを起動して同じE2Eを実行する処理を追加しています。
+本番用DockerfileはNode.js 24、production依存、非root起動で、8080に画面とAPIを配信します。作成環境には稼働中のDockerデーモンがないため、ローカルでのDockerビルド・実行は未実施です。Linux/amd64の本番コンテナは、次のGitHub Actionsで実行して確認しました。
 
 ## GitHub・Copilot appでの確認
 
-配布用リポジトリはTemplate repositoryとして用意済みです。Container Apps版のCI実行結果は、PRで確認します。GHCRへのイメージ公開・Azureへのデプロイは初期設定を有効にした`main`だけで動き、PRでは実行しません。
+配布用リポジトリはTemplate repositoryとして用意済みです。Container Apps版のコミット`2e0f8b4`の[Check実行結果](https://github.com/mochan-tk/hackathon-for-student-20261017/actions/runs/37842386063)は成功しました。GitHubのLinux runnerで依存関係のインストール、lint・型・本番ビルド、Dockerイメージのビルド・起動、APIの起動確認、本番コンテナに対するPC幅・スマホ幅のE2Eを確認しています。
+
+GHCRへのイメージ公開・Azureへのデプロイは初期設定を有効にした`main`だけで動き、PRでは実行しません。上の実行でも`publish`と`deploy`はスキップされています。
 
 Copilot appのGUI手順は、[v1.1.26のbranch actions追加](https://github.com/github/app/releases/tag/v1.1.26)と[v1.1.27のPull・Pushの表示条件](https://github.com/github/app/releases/tag/v1.1.27)を公式リリースノートで確認しました。10月8日のmacOS実機ではChanges、コミット表示、ブランチ操作メニュー、Current checkoutを確認しました。GUIでcommit・pushしてCodespacesへ渡す一連の操作は未実施です。
 
