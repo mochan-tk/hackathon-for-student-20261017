@@ -35,30 +35,42 @@ npm run build
 npm run preview
 ```
 
-PCでは `http://127.0.0.1:4281`、Codespacesでは **Ports → 4281 → Open in Browser** を開きます。Node.jsサーバーが `dist/` の画面と `/api` を配信します。画面を変更した後は再ビルドが必要です。コンテナ内では同じサーバーが起動し、8080番で受け付けます。Dockerを使わず本番サーバーを起動するコマンドは `npm start` です。
+PCでは `http://127.0.0.1:4281`、Codespacesでは **Ports → 4281 → Open in Browser** を開きます。4281が表示されなければ **Forward a Port** で追加します。Node.jsサーバーが `dist/` の画面と `/api` を配信します。画面を変更した後は再ビルドが必要です。コンテナ内では同じサーバーが起動し、8080番で受け付けます。Dockerを使わず本番サーバーを起動する場合も、先に `npm run build` を実行してから `npm start` を使います。
+
+PCでブラウザテストを初めて実行するときは、次を一度実行します。Codespacesでは開発環境の初回準備に含まれています。
+
+```sh
+npx playwright install chromium
+```
+
+Linuxでブラウザの依存ライブラリが足りない場合は `npx playwright install --with-deps chromium` を使います。
+
+E2Eは自分でビルドし、4281番に本番用のNode.jsサーバーを起動して、PC・スマートフォン幅の操作とAPIの応答を確認します。手動の `npm run preview` が動いていたら **Ctrl+C** で止めてから、次を実行してください。開発用4280番は動かしたままで構いません。その場合は別のターミナルを使います。
 
 ```sh
 npm run check
 npm run test:e2e
 ```
 
-E2Eは自分でビルドし、4281番に本番用のNode.jsサーバーを起動して、PC・スマートフォン幅の操作とAPIの応答を確認します。手動の `npm run preview` が動いていたら **Ctrl+C** で止めてから実行してください。開発用4280番は動かしたままで構いません。
+[tests/starter.spec.ts](../../tests/starter.spec.ts)は自分たちの企画の完成条件を確かめるテストへ更新します。[tests/runtime.spec.ts](../../tests/runtime.spec.ts)にある画面配信・404・起動確認APIのテストは残し、その上で機能のテストを追加してください。
 
 ## API・認証・DBを追加するとき
 
 初期スターターには `GET /api/health` という起動確認用APIがあり、`{"status":"ok"}` を返します。業務用のAPI、DB、ログイン機能は、企画に必要なものを実装します。
 
-APIは [server/api.js](../../server/api.js) に追加し、フロントエンドからは `fetch('/api/エンドポイント名')` のように呼びます。PC・Codespaces・公開先で同じ相対URLを使うため、ブラウザからPCの `localhost` を直接指定する必要はありません。APIの入力チェックと期待する結果もテストに含めます。
+APIは [server/api.js](../../server/api.js) の末尾にある404処理より前に追加し、フロントエンドからは `fetch('/api/エンドポイント名')` のように呼びます。PC・Codespaces・公開先で同じ相対URLを使うため、ブラウザからPCの `localhost` を直接指定する必要はありません。APIの入力チェックと期待する結果もテストに含めます。
 
 DBや外部AIサービスが必要なら、開発用の接続先またはモックを用意します。共有データや残したいデータには外部DBを使い、コンテナ内のファイルやメモリーを永続保存先にしないでください。認証を追加した場合は、本物のログインと公開先での権限を別途確認します。何を模擬しているかは[検証記録](../verification.md)へ残します。
 
-ローカルのサーバー用設定は、[.env.example](../../.env.example)を参考にリポジトリのルートの `.env` に置けます。`dev`・`preview`・`start` はこのファイルを読み込みます。設定を変えたらサーバーを起動し直します。`.env` はGitやコンテナイメージに含めず、公開先では環境変数・シークレットとして設定します。秘密のAPIキーはサーバー側で使い、フロントエンドや `VITE_` 変数に入れないでください。
+ローカルのサーバー用設定は、[.env.example](../../.env.example)を参考にリポジトリのルートの `.env` に置けます。`dev`・`preview`・`start` はこのファイルを読み込みます。教材の待受設定を上書きする `PORT`・`HOST` は追加せず、外部サービスなどの設定を入れてください。設定を変えたらサーバーを起動し直します。`.env` はGitやコンテナイメージに含めず、公開先では環境変数・シークレットとして設定します。秘密のAPIキーはサーバー側で使い、フロントエンドや `VITE_` 変数に入れないでください。
+
+PCからCodespacesへ切り替える場合、`.env` はcommit・push・Pullでは引き継がれません。外部サービスを使う場合は、Codespaces側にも `.env.example` を参考に `.env` を作り、必要な開発用の値を設定してから起動します。公開先の値はAzure側にも別途設定します。
 
 ## コンテナで確認する（任意）
 
 普段の開発は `npm run dev` で進め、公開前に本番用コンテナの画面とAPIを操作したい場合に使います。PCへのDocker導入は必須ではありません。
 
-- **Codespaces**：教材の開発環境にはDocker用の機能を含めています。以前から使っているCodespaceでは、変更を取り込んだ後、コマンドパレットの **Codespaces: Rebuild Container** を実行します。
+- **Codespaces**：教材の開発環境にはDocker用の機能を含めています。Codespaces内でアプリ用コンテナを起動するため、PCへのDocker導入は不要です。以前から使っているCodespaceでは、変更を取り込んだ後、コマンドパレットの **Codespaces: Rebuild Container** を実行します。
 - **PC**：Dockerを導入して起動してある場合に実行できます。未導入ならCodespacesまたはGitHub Actionsで確認できます。
 
 手動のpreviewやE2Eで4281番を使用中なら停止し、リポジトリのルートで次を実行します。
@@ -68,7 +80,7 @@ docker build -t student-hackathon .
 docker run --rm -p 127.0.0.1:4281:8080 student-hackathon
 ```
 
-PCでは `http://127.0.0.1:4281`、Codespacesでは **Ports → 4281 → Open in Browser** を開き、画面と `/api/health` を確認します。Codespacesの公開範囲はPrivateのままで構いません。終了は **Ctrl+C** です。変更後は再度buildして起動します。
+PCでは `http://127.0.0.1:4281`、Codespacesでは **Ports → 4281 → Open in Browser** を開き、画面と `/api/health` を確認します。4281が表示されなければ **Forward a Port** で追加します。Codespacesの公開範囲はPrivateのままで構いません。終了は **Ctrl+C** です。変更後は実行中のコンテナを終了し、再度buildして起動します。日々の編集に使う **Run** はNode.jsによる開発サーバーを起動するため、このDocker操作は別途行います。
 
 外部サービス用の環境変数が必要な場合は、runに `--env-file .env` を追加できます。ファイルに秘密情報があっても、イメージへコピーする必要はありません。
 

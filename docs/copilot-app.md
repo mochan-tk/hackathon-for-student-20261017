@@ -29,11 +29,15 @@ Copilot appによる編集はPC上で行います。Codespacesで動作確認す
 
 ## 2. チームのリポジトリをAppに追加する
 
+Azureへの自動公開まで行う場合、Publicリポジトリ、またはGitHub Proの個人アカウント所有のPrivateリポジトリで進められます。Organization所有のPrivateリポジトリではOrganizationのGitHub Team以上が必要です。[公開の初期設定](common/azure-setup.md)を参照してください。
+
 1. [企画の進め方](common/ideation.md)で、誰の何を解決するかをチームで決めます。
 2. [教材のGitHubページ](https://github.com/mochan-tk/hackathon-for-student-20261017)で **Use this template → Create a new repository** を選び、チーム用リポジトリを作ります。すでに作ったものがある場合は、そのリポジトリを使います。
-3. Copilot appを開き、**Sign in to GitHub** で今回使う学生アカウントにログインします。
-4. **Projects** 横の追加ボタンから **GitHub repository** を選び、チームのリポジトリを選択してcloneします。
-5. そのプロジェクトで新しいsessionを作り、実行場所を **Local repository**（版によっては **Current checkout**）、モードを **Interactive**、モデルを **Auto** にします。特定モデルを選ぶ手順はありません。
+3. チームのほかのメンバーも編集する場合は、リポジトリ所有者が **Settings → Collaborators** から招待し、各メンバーが招待を受け入れます。
+4. Copilot appを開き、**Sign in to GitHub** で今回使う学生アカウントにログインします。
+5. **Projects** 横の追加ボタンから **GitHub repository** を選び、チームのリポジトリを選択してcloneします。
+6. そのプロジェクトで新しいsessionを作り、実行場所を **Local repository**（版によっては **Current checkout**）、モードを **Interactive**、モデルを **Auto** にします。特定モデルを選ぶ手順はありません。
+7. 最初に「README.mdを読み、この教材の構成を確認してください。まだファイルを編集せず待ってください」と送ってsessionを開始します。
 
 Autoが表示されない、利用権利や利用上限の表示が出る場合は、アカウント名と表示内容を運営に見せてください。
 
@@ -41,15 +45,15 @@ Autoが表示されない、利用権利や利用上限の表示が出る場合�
 
 ## 3. 作業ブランチと実行場所を準備する
 
-リポジトリ設定の確認が表示されたら、[.github/github-app.yml](../.github/github-app.yml)を確認して受け入れます。教材の **Setup** は依存関係のインストール、**Run** は `npm run dev` を通じたViteとNode.jsのAPIの起動に使います。
+リポジトリ設定の確認が表示されたら、[.github/github-app.yml](../.github/github-app.yml)を確認して受け入れます。教材の **Setup** は依存関係のインストール、**Run** は `npm run dev` を通じたViteとNode.jsのAPIの起動に使います。Runのコマンドはこの設定ファイルに登録済みです。設定の受け入れ前は適用されず、設定ファイルが更新された場合も受け入れ直します。[設定の公式説明](https://docs.github.com/en/copilot/reference/github-copilot-app-reference/repository-configuration)
 
-Terminalを開き、作業用ブランチを作ります。session開始後にチャットで `/terminal` と入力しても開けます。
+Appが作業用ブランチを作成済みの場合は、そのブランチを使います。まだ `main` で作業している場合は、Terminalを開いて次で作業用ブランチを作ります。session開始後にチャットで `/terminal` と入力しても開けます。
 
 ```sh
 git switch -c feat/first-demo
 ```
 
-すでに同名のブランチがある場合は `git switch feat/first-demo` で戻ります。Appが別の作業用ブランチを作成済みの場合は、そのブランチを使って構いません。
+すでに同名のブランチがある場合は `git switch feat/first-demo` で戻ります。複数人が別々に実装する場合は、`feat/input-form` など作業ごとに別の名前にします。
 
 ### PCで動作確認する場合
 
@@ -126,11 +130,13 @@ docs/product.md、docs/tasks.md、docs/verification.mdと現在の変更を確�
 
 ## 6. チームの完成条件を確認する
 
+動作確認に選んだ経路へ進みます。どちらも[確認の進め方](common/verification.md)に沿って、実装した人とは別の学生が必須DoDを確かめます。
+
 ### PCで確認する
 
 [確認の進め方](common/verification.md)に沿って、実装した人とは別の学生が **Run → Browser** の `http://127.0.0.1:4280` で実際に操作します。同じPCで交代して構いません。全画面のボタン・移動・戻る操作に加え、空の状態、入力ミス、スマートフォン幅を確認し、実際の結果を記録します。見た目を直したい場合は、Browserの **Pick & Polish** で要素を選んで伝えることもできます。
 
-Terminalで次の確認も行います。
+サーバーとは別のTerminalで次の確認も行います。
 
 ```sh
 npm run check
@@ -157,7 +163,7 @@ PCとCodespacesのファイルは自動同期されません。**同じチーム
 2. **Changesのブランチ操作メニュー（branch actions）**を開き、**Commit** の操作を選びます。確認画面が出たら、対象の変更とコミットメッセージを確認して実行します。メッセージは「企画と完成条件を記録」「入力フォームを追加」のように変更内容が分かるものにします。Copilotにはメッセージ案を相談できます。すでにコミット済みの場合は、新しいcommitは不要なので次へ進みます。
 3. **commitしたら、同じメニューから続けてすぐにPushの操作を選びます。** 初回にブランチの公開を求められたら、チームのリポジトリへ現在の作業ブランチを公開します。Appの処理完了を待ちます。**CommitはPC内への記録、PushはGitHubへの送信**です。commitだけではCodespacesへ届きません。
 4. ブラウザでGitHubの**同じチームリポジトリ**を開き、ブランチ選択欄で作業ブランチを選びます。最新の変更が反映されていれば、Codespacesへ進めます。
-5. **ここからはCodespacesで動作確認する場合の操作です。** 初回は、作業ブランチを選んだまま **Code → Codespaces → Create codespace on（作業ブランチ名）** から作成します。2回目以降は、その作業ブランチの既存Codespaceを開きます。環境準備は[Codespacesの手順](codespaces.md#2-codespaceを開く)を参照してください。
+5. **ここからはCodespacesで動作確認する場合の操作です。** 初回は、作業ブランチを選んだまま **Code → Codespaces → Create codespace on（作業ブランチ名）** から作成し、準備が終わるまで待ちます。2回目以降は、その作業ブランチの既存Codespaceを開きます。初回準備がうまくいかない場合は[Codespacesの手順2](codespaces.md#2-codespaceを開く)を参照してから、この手順へ戻ります。Appですでに企画・ブランチを準備しているため、Codespaces側で作り直す必要はありません。
 6. **既存Codespaceを使う場合だけ**、前回のサーバーが動いていればTerminalで `Ctrl+C` を押して止め、**Source Control → … → Pull** で今回pushした変更を取り込みます。新規作成直後はこの操作は不要です。
 7. **CodespacesのTerminal**で起動します。
 
@@ -166,7 +172,7 @@ PCとCodespacesのファイルは自動同期されません。**同じチーム
    npm run dev
    ```
 
-8. **Ports → 4280 → Open in Browser** を開いて操作します。ポートの公開範囲は **Private** のままで構いません。別の学生もログイン済みの同じPCで交代して確認できます。Codespaceやサーバーを停止すると、この確認用URLは使えなくなります。
+8. **Ports → 4280 → Open in Browser** を開き、[確認の進め方](common/verification.md)に沿って操作します。4280が表示されなければ **Forward a Port** で追加します。ポートの公開範囲は **Private** のままで構いません。別の学生もログイン済みの同じPCで交代して確認できます。Codespaceやサーバーを停止すると、この確認用URLは使えなくなります。
 9. Codespacesの別Terminalで `npm run check` と `npm run test:e2e` を実行します。結果・エラー全文・実際の操作結果をPCのCopilot appへ渡し、修正と `docs/verification.md` への記録を依頼します。スクリーンショットも添えられます。修正後は、再びAppの画面でcommit・pushするところから繰り返します。
 
 別のブランチで使っていたCodespaceを再利用する場合は、左下のブランチ名から今回の作業ブランチへ切り替えてからPullします。一覧に見当たらなければ、手順5の方法で作業ブランチから新規作成できます。Pullでエラーが出た場合は、その表示をCopilotか運営へ渡してください。[CodespacesのGUI操作の公式手順](https://docs.github.com/en/codespaces/developing-in-a-codespace/using-source-control-in-your-codespace#pulling-changes-from-the-remote-repository)も参照できます。

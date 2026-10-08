@@ -1,6 +1,6 @@
 # 設計の根拠と確認範囲
 
-公式情報の確認基準日：**2026年10月8日**。Container Apps・コンテナ開発に関する資料は**10月9日**に確認しました。以下は教材を設計した根拠です。各社の記事をこの教材と同じ環境で再現したという意味ではありません。UI、提供条件、利用枠は変更されるため、開催前にリンク先と実際の学生アカウントで確認します。
+公式情報の確認基準日：**2026年10月8日**。Container Apps・コンテナ開発、GitHubのOIDC接続、開発環境の操作手順は**10月9日**に再確認しました。以下は教材を設計した根拠です。各社の記事をこの教材と同じ環境で再現したという意味ではありません。UI、提供条件、利用枠は変更されるため、開催前にリンク先と実際の学生アカウントで確認します。
 
 ## 教材に採用した考え方
 
@@ -25,7 +25,7 @@ Spec Kitや各社SDK自体の導入は、この教材の必須条件ではあり
 
 - [Agent Skills](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/add-skills)：VS Code AgentとCopilot appの両方が対象。教材では`.github/skills/`を共有し、認識されない場合は`SKILL.md`を明示して読みます。
 - [Copilotのプラン](https://docs.github.com/en/copilot/get-started/plans)：学生向け権利と利用条件の確認先。GitHub ProとCopilotの権利を混同せず、当日のアカウント表示も確認します。
-- [Auto model selection](https://docs.github.com/en/copilot/concepts/auto-model-selection)：モデルはAutoを基本にします。特定モデル名を指定する教材にはしません。
+- [Auto model selection](https://docs.github.com/en/copilot/concepts/models/auto-model-selection)：モデルはAutoを基本にします。特定モデル名を指定する教材にはしません。
 - [Copilot appのsession](https://docs.github.com/en/copilot/how-tos/github-copilot-app/agent-sessions)：Planで方針を確認し、Interactiveで実装と修正を進めます。
 
 教材の「ゴールまで繰り返す」は、完成条件をファイルに保存して実装・確認・修正を続ける進め方です。特定製品の`/goal`、永続的な自動再開、Copilot appのAutopilotを同一の機能として扱いません。
@@ -50,6 +50,7 @@ Copilot appから既存のCodespaceへの直接接続は未検証です。Appの
 - 普段の開発はViteとNode.jsのAPIを起動し、PCとCodespacesの4280から開きます。Codespacesは[ポート転送](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace)を使います。プレビューURLと継続して共有する公開URLを区別します。
 - 公開先は[Azure Container Apps](https://learn.microsoft.com/en-us/azure/container-apps/containers)です。画面とAPIを通常のHTTPサーバーで提供し、環境変数で外部サービスへ接続します。Dockerfileとアプリを他のコンテナ実行環境へ移しやすくしますが、DB・認証・Azureの公開設定の移行作業は残ります。Container Apps向けのイメージは `linux/amd64` で作成します。
 - [Dockerfile](https://docs.docker.com/build/concepts/dockerfile/)で本番用のイメージを作り、GitHub Actionsで起動・テストしてから公開します。PCへのDocker導入は任意です。Codespacesには[Docker用Dev Container Feature](https://github.com/devcontainers/features/tree/main/src/docker-in-docker)を含め、手動のコンテナ確認にも使えます。
+- GitHub ActionsからAzureへの接続は[OIDC](https://docs.github.com/en/actions/concepts/security/openid-connect)を使います。2026年7月15日以降に作成されたリポジトリでは、既定のsubjectに所有者とリポジトリのIDが含まれます。[Azure側の移行資料](https://learn.microsoft.com/en-us/entra/workload-id/workload-identities-github-immutable-subjects)に合わせ、初期設定では実際のsubjectを確認して登録します。
 - [Dynamic workflows](https://docs.github.com/en/copilot/concepts/agents/dynamic-workflows)と[GitHub Agentic Workflows](https://github.blog/changelog/2026-06-11-github-agentic-workflows-is-now-in-public-preview/)は、基準日時点ではPublic Preview。並列エージェント、定期自動化、全自律実行は教材の必須条件にしません。
 - `npm run dev`によるローカル確認にAzureリソースやクレジットは不要です。Azureへの公開や外部サービスの利用には、対象サブスクリプションの権利・利用枠を確認します。共有データやAIが企画の必須機能なら、当初から実装・検証対象に含めます。
 

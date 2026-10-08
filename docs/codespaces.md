@@ -6,8 +6,10 @@
 
 ## 1. チームのリポジトリを作る
 
+Azureへの自動公開まで行う場合、Publicリポジトリ、またはGitHub Proの個人アカウント所有のPrivateリポジトリで進められます。Organization所有のPrivateリポジトリではOrganizationのGitHub Team以上が必要です。[公開の初期設定](common/azure-setup.md)を参照してください。
+
 1. [企画の進め方](common/ideation.md)に沿って、誰の何を解決するかをチームで決めます。
-2. [教材のGitHubページ](https://github.com/mochan-tk/hackathon-for-student-20261017)で **Use this template → Create a new repository** を選びます。
+2. [教材のGitHubページ](https://github.com/mochan-tk/hackathon-for-student-20261017)で **Use this template → Create a new repository** を選びます。既にチーム用リポジトリを作っている場合は、そのリポジトリを使います。
 3. チームの代表者のアカウント、または利用できるOrganizationを所有者にして作成します。チーム全員が編集する場合は、リポジトリの **Settings → Collaborators** からメンバーを追加します。
 4. 以降は、作成したチームのリポジトリを開いて作業します。
 
@@ -17,10 +19,12 @@
 
 1. チームのリポジトリで **Code → Codespaces → Create codespace on main** を選びます。マシンを選べる場合は、まず2-coreを使います。
 2. ブラウザにVS Codeが開き、準備が終わるまで待ちます。
-3. Copilot Chatを開き、今回使う学生アカウントでサインインしていることを確認します。
+3. Copilot Chatを開き、今回使う学生アカウントでサインインしていることを確認します。**Session Target** が表示される場合は **Local** を選び、開いているCodespaceのファイルとTerminalを使うチャットで進めます。
 4. GitHubの[Copilot設定](https://github.com/settings/copilot)で **Copilot Student** の利用権利を確認します。Chatのモデルは **Auto** を使います。特定モデルを選ぶ手順はありません。
 
 Copilot appからpushした変更を確認する場合は、上の `main` の代わりに、その作業ブランチをGitHubで選んでからCodespaceを作成します。
+
+以下の **Plan → Agent** は、VS CodeのLocalセッションの操作です。ここでのLocalはチャットの種類を指し、PCへのNode.js導入は必要ありません。[VS Codeのセッションの違い](https://code.visualstudio.com/docs/agents/run/agent-harnesses)
 
 Copilotが使えない、Autoが表示されない、利用上限の表示が出る場合は、アカウント名と表示内容を運営に見せてください。GitHub Proへの加入とCopilot Studentの有効化は別です。
 
@@ -43,13 +47,15 @@ Node.jsは **24.x** を使います。最後のコマンドはサーバーを動
 
 ## 3. 作業用ブランチと資料を準備する
 
+Copilot appからの確認用に作業ブランチを開いている場合は、そのまま使い、[Appの確認手順](copilot-app.md#codespacesへ変更を渡して確認する)へ戻ります。
+
 サーバーとは別のターミナルを開きます。
 
 ```sh
 git switch -c feat/first-demo
 ```
 
-同名のブランチをすでに使っている場合は、作成し直さず `git switch feat/first-demo` で戻ります。
+同名のブランチをすでに使っている場合は、作成し直さず `git switch feat/first-demo` で戻ります。複数人で編集する場合は、`feat/input-form` など作業ごとに別の名前にします。
 
 [docs/source/](source/)へ企画メモや画面PNGを入れます。Figmaを使った場合も、画面PNGと「押すとどうなるか」のメモがあれば進められます。[締切管理の例](examples/deadline.md)も参考にできます。
 
@@ -131,18 +137,7 @@ npx playwright install --with-deps chromium
 
 ## 7. 保存し、必要になったら公開する
 
-Copilotに「意図した変更だけを確認し、コミットしてこのブランチをpushする手順を案内して」と頼みます。自分で行う場合は、差分を確認してから必要なファイルをステージし、コミットします。
-
-```sh
-git status
-git diff
-```
-
-**Source Control** の `+` で対象ファイルをステージし、コミットメッセージを入力して **Commit** を選びます。その後、**Publish Branch** または次のコマンドでGitHubへ送ります。
-
-```sh
-git push -u origin feat/first-demo
-```
+**Source Control** で変更ファイルを選んで差分を確認し、採用するファイルの `+` を押してステージします。コミットメッセージを入力して **Commit** を選び、そのままGitHubへ送ります。初回は **Publish Branch**、公開済みの作業ブランチでは **Source Control → … → Push** を使います。Copilotには変更内容の説明やコミットメッセージ案を相談できます。[CodespacesのGUI操作の公式手順](https://docs.github.com/en/codespaces/developing-in-a-codespace/using-source-control-in-your-codespace)
 
 GitHubのチームリポジトリで **Compare & pull request** を開き、`main` へのPRを作ります。チームで変更とCIの結果を確認してマージします。CIには本番用コンテナを起動して行うテストも含まれます。Codespacesでの開発・動作確認までなら、Azureへのデプロイは不要です。継続して使えるURLが必要になったら、[Azure Container Appsへの公開手順](common/publish.md)へ進みます。公開後も実際のURLで動作を確認します。
 

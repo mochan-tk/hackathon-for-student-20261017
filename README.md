@@ -13,6 +13,10 @@
 
 チームごとに[このテンプレートからリポジトリを作成](https://github.com/mochan-tk/hackathon-for-student-20261017/generate)します。GitHub Copilot StudentとGitHub Proを利用する想定です。権利の有効化と利用残量は事前にアカウント画面で確認してください。
 
+Azureへの自動公開まで行う場合は、[初期設定](docs/common/azure-setup.md)にあるリポジトリの所有者・公開範囲の条件も確認してください。Organization所有のPrivateリポジトリでは、学生個人のGitHub Proだけでは公開に使うEnvironmentを利用できません。
+
+どちらかの環境ガイドを選び、そこから共通手順を参照して進めます。企画やリポジトリの準備を済ませている場合は、その成果を使って続けてください。Copilot appで編集し、Codespacesで実行する経路もAppのガイドに含めています。
+
 ## 企画から公開まで
 
 1. [アイデアをつくる](docs/common/ideation.md)：困りごとを調べ、解決したいことを選ぶ。
@@ -55,7 +59,7 @@ npm run test:e2e
 
 公開時は画面とAPIを1つのコンテナにまとめ、Azure Container Appsへ配置します。GitHub Actionsが本番用コンテナをビルド・起動してテストするため、学生のPCへのDocker導入は必須ではありません。[手元やCodespacesでコンテナを確認する手順](docs/common/local-development.md#コンテナで確認する任意)も用意しています。
 
-最初のテストはスターターの起動確認用です。企画を実装するときに、自分たちの完成条件を確かめるテストへ更新します。
+`tests/starter.spec.ts` は最初の画面の確認用です。企画を実装するときに、自分たちの完成条件を確かめるテストへ更新します。`tests/runtime.spec.ts` のAPI・画面配信の基盤テストは残して、アプリの機能テストと一緒に実行します。
 
 ## Copilotとの進め方
 

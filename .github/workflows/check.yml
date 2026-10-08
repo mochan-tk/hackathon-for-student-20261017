@@ -5,6 +5,11 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      show_azure_oidc:
+        description: '初期設定用: Azureへ登録するOIDC接続情報だけ表示する（公開・デプロイしない）'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -15,7 +20,46 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
+  oidc-setup:
+    if: github.event_name == 'workflow_dispatch' && inputs.show_azure_oidc && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: production
+    permissions:
+      id-token: write
+    steps:
+      - name: Show the actual Azure federation values without exposing the token
+        run: |
+          node --input-type=module <<'NODE'
+          import { appendFileSync } from 'node:fs';
+          const requestURL = new URL(process.env.ACTIONS_ID_TOKEN_REQUEST_URL);
+          requestURL.searchParams.set('audience', 'api://AzureADTokenExchange');
+          const response = await fetch(requestURL, {
+            headers: { Authorization: `Bearer ${process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN}` },
+          });
+          if (!response.ok) throw new Error(`OIDC request failed: HTTP ${response.status}`);
+          const { value: token } = await response.json();
+          if (typeof token !== 'string') throw new Error('OIDC response did not contain a token');
+          const claims = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString('utf8'));
+          const values = { Issuer: claims.iss, Subject: claims.sub, Audience: claims.aud };
+          for (const [name, value] of Object.entries(values)) {
+            if (typeof value !== 'string' || !value || /[\r\n`]/.test(value)) {
+              throw new Error(`Unexpected OIDC ${name} format`);
+            }
+          }
+          const summary = [
+            '### Azure OIDC setup',
+            'Azure portalのFederated credentials → Other issuerへ、次の値をそのまま登録します。',
+            '',
+            ...Object.entries(values).map(([name, value]) => `${name}: \`${value}\``),
+            '',
+            'Environment: `production`。トークンそのものは表示・保存していません。',
+          ];
+          appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary.join('\n\n') + '\n');
+          NODE
+
   check:
+    if: github.event_name != 'workflow_dispatch' || !inputs.show_azure_oidc
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:

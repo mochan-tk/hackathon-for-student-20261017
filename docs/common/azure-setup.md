@@ -4,27 +4,31 @@
 
 必要なのは、チームリポジトリの設定変更権限、Azureでリソースを作成する権限とロールを割り当てる権限です。使うサブスクリプションとチーム用リソースグループを決めます。学生クレジットは利用できるサービス・リージョン・残量を確認して使います。[Azure for Students](https://azure.microsoft.com/en-us/pricing/offers/ms-azr-0170p/)
 
+GitHubの **Environment** を使います。Publicリポジトリ、またはGitHub Proの個人アカウントが所有するPrivateリポジトリで進められます。Organization所有のPrivateリポジトリには、そのOrganizationのGitHub Team以上のプランが必要です。学生個人のProはOrganizationへは引き継がれません。[Environmentの利用条件](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments)
+
 ## 1. テスト済みコンテナをGitHubへ保存する
 
-1. この教材の変更を含むPRを`main`へマージします。
+1. チームのリポジトリの`main`に、この教材の`.github/workflows/check.yml`と`Dockerfile`があることを確認します。テンプレートから作成した直後ならそのまま進めます。公開したいアプリの変更が作業ブランチにある場合は、確認済みのPRを`main`へマージします。
 2. GitHubの **Settings → Secrets and variables → Actions → Variables → New repository variable** で、`ENABLE_CONTAINER_PUBLISH`を値`true`で追加します。`ENABLE_AZURE_DEPLOY`はまだ設定しません。
-3. **Actions → Check → Run workflow** で **main** を選んで実行します。
+3. **Actions → Check → Run workflow** で **main** を選び、**初期設定用: Azureへ登録するOIDC接続情報だけ表示する**のチェックは外したまま実行します。
 4. `check`と`publish`が成功したら、実行の **Summary → Tested container image** を開きます。`Tag`に表示される`ghcr.io/所有者/リポジトリ:タグ`を次節で使います。このイメージは本番コンテナでのブラウザテストを通っています。
-5. リポジトリの **Packages**、または所有者のプロフィール／Organizationの **Packages** から、このコンテナパッケージを開きます。**Package settings → Change visibility → Public** にします。新規パッケージは通常Privateなので、初回に切り替えます。
+5. リポジトリの **Packages**、または所有者のプロフィール／Organizationの **Packages** から、このコンテナパッケージを開きます。**Package settings → Change visibility → Public** にします。新規パッケージは通常Privateなので、初回に切り替えます。OrganizationのポリシーでPublicへ変更できない場合は、運営と所有者・公開方法を決めてから進めます。
 
-この標準手順では、コンテナを誰でも取得できるようにします。公開できるアプリコード・画面素材だけを含めてください。`.env`や秘密のキーはイメージへ入れません。非公開コードを配布するチームは、運営と非公開レジストリ・Azure側の取得認証を用意する別構成を選び、このPublic設定を使いません。[GHCRの公開範囲](https://docs.github.com/en/packages/learn-github-packages/configuring-a-packages-access-control-and-visibility)
+この標準手順では、コンテナを誰でも取得できるようにします。一度PublicにしたパッケージはPrivateへ戻せないため、公開できるアプリコード・画面素材だけを含めてください。`.env`や秘密のキーはイメージへ入れません。非公開コードを配布するチームは、運営と非公開レジストリ・Azure側の取得認証を用意する別構成を選び、このPublic設定を使いません。[GHCRの公開範囲](https://docs.github.com/en/packages/learn-github-packages/configuring-a-packages-access-control-and-visibility)
 
 ## 2. Azure portalでContainer Appを作る
 
 Azure portalで **Container Apps → Create** を開き、次を設定します。表示名やタブの並びが異なる場合は[公式の作成手順](https://learn.microsoft.com/en-us/azure/container-apps/quickstart-portal)も参照します。
+
+初めて使うサブスクリプションでは、**Subscriptions → 対象のサブスクリプション → Resource providers**で`Microsoft.App`が登録済みか確認し、未登録なら **Register** を選びます。ほかのプロバイダーの未登録エラーが出た場合も、使うサービスについて同じ画面で登録します。登録の権限がない場合は運営に依頼します。[リソースプロバイダーの登録](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-providers-and-types#azure-portal)
 
 | 項目 | 設定 |
 | --- | --- |
 | Subscription / Resource group | 学生が利用するサブスクリプションと、チーム用リソースグループ |
 | Container app name | チームのアプリ名 |
 | Region / Environment | 利用可能なリージョンとContainer Apps環境。ワークロードプロファイルはConsumption |
-| Image source | 自分のコンテナイメージ。外部レジストリを選択 |
-| Registry / Image | `ghcr.io`と、手順1のTagに表示されたイメージ・タグ。公開イメージなので取得用パスワードは不要 |
+| Deployment source / Image source | **Container image**を選び、Quickstart imageは使わず外部レジストリを選択 |
+| Registry / Image | Registry serverは`ghcr.io`。Image and tagには手順1のTagから`ghcr.io/`を除いた`所有者/リポジトリ:タグ`。公開イメージなので取得用パスワードは不要 |
 | CPU / Memory | 最初は0.5 vCPU / 1 GiBを目安に、アプリに合わせて選ぶ |
 | Ingress | 有効、外部からのHTTPアクセスを許可、Target portは **8080** |
 | Scale | Minimum replicas **0**、Maximum replicas **1**から開始 |
@@ -40,12 +44,13 @@ Consumptionには月ごとの無料枠があり、0レプリカではコンテ�
 
 長期間使うクライアントシークレットを作らず、**OpenID Connect（OIDC）**で接続します。ここで作るIDは、GitHub Actionsがアプリを更新するためのものです。
 
-1. GitHubの **Settings → Environments → New environment** で`production`を作ります。**Deployment branches and tags**では、デプロイできるブランチを`main`に限定します。
-2. Azure portalの **Managed Identities** で、チームのリソースグループに **User assigned managed identity** を作ります。Overviewにある **Client ID**、**Subscription ID**、**Tenant ID** を控えます。
-3. そのIDの **Federated credentials → Add credential** を開き、GitHub ActionsからAzureへデプロイするシナリオを選びます。Organization/OwnerとRepositoryは**学生チームのリポジトリ**、Entity typeは **Environment**、Environment nameは **production** にします。Audienceは`api://AzureADTokenExchange`を使います。
-4. チーム用リソースグループの **Access control (IAM) → Add role assignment** で、このIDへ **Contributor** を割り当てます。割り当て先の範囲はそのチームのリソースグループです。権限不足の場合は、割り当て可能な運営・管理者に依頼します。
+1. GitHubの **Settings → Environments → New environment** で`production`を作ります。**Deployment branches and tags → Selected branches and tags → Add deployment branch or tag rule**で、Ref typeを **Branch**、名前を`main`にして追加します。
+2. **Actions → Check → Run workflow**で **main** を選び、**初期設定用: Azureへ登録するOIDC接続情報だけ表示する**にチェックを入れて実行します。今回は`oidc-setup`だけが動きます。Azureへのログイン、コンテナの公開、デプロイは行いません。成功した実行の **Summary → Azure OIDC setup** にある **Issuer / Subject / Audience** を控えます。トークンそのものは表示されません。
+3. Azure portalの **Managed Identities** で、チームのリソースグループに **User assigned managed identity** を作ります。Overviewにある **Client ID**、**Subscription ID** を控えます。**Tenant ID** は **Microsoft Entra ID → Overview** で確認できます。
+4. そのIDの **Federated credentials → Add credential** を開き、シナリオは **Other issuer** を選びます。手順2の **Issuer / Subject / Audience** をそれぞれそのまま入力し、Nameは`github-production`などにして追加します。Subjectは大文字・小文字、数字のID、末尾の`environment:production`まで一致させます。
+5. チーム用リソースグループの **Access control (IAM) → Add role assignment** で、このIDへ **Contributor** を割り当てます。割り当て先の範囲はそのチームのリソースグループです。権限不足の場合は、割り当て可能な運営・管理者に依頼します。
 
-参考：[Azure LoginのOIDC接続](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect)・[User assigned managed identityのFederated credentials](https://learn.microsoft.com/en-us/entra/workload-id/workload-identity-federation-create-trust-user-assigned-managed-identity)。Environment名・リポジトリ名は一致させます。この教材のジョブは`production`を使うため、Entity typeをBranchとして登録しません。
+**2026年7月15日以降に作ったGitHubリポジトリでは、Subjectに所有者とリポジトリの数字のIDも含まれます。** 名前だけでSubjectを組み立てるとAzureへのログインに失敗するため、この教材では実際の値を表示してコピーします。旧形式のリポジトリでも同じ手順を使えます。[GitHubのSubject仕様](https://docs.github.com/en/actions/reference/security/oidc#immutable-subject-claims)・[Azureでの対応](https://learn.microsoft.com/en-us/entra/workload-id/workload-identities-github-immutable-subjects)・[Other issuerの設定](https://learn.microsoft.com/en-us/entra/workload-id/workload-identity-federation-create-trust-user-assigned-managed-identity#other)
 
 ## 4. 公開を有効にする
 
@@ -61,7 +66,7 @@ GitHubの **Settings → Secrets and variables → Actions → Variables** に�
 | `ENABLE_CONTAINER_PUBLISH` | `true`（手順1で設定済み） |
 | `ENABLE_AZURE_DEPLOY` | `true` |
 
-**Actions → Check → Run workflow → main** で実行します。`check` → `publish` → `deploy`が成功し、Summaryに公開URLが表示されれば初期設定は完了です。以降は`main`へのマージで同じ流れが動きます。
+**Actions → Check → Run workflow → main** で、**OIDC接続情報だけ表示するチェックを外して**実行します。`check` → `publish` → `deploy`が成功し、Summaryに公開URLが表示されれば初期設定は完了です。以降は`main`へのマージで同じ流れが動きます。
 
 `deploy`は既存アプリへテスト済みイメージのdigestを指定して更新します。Single revision modeで新しいリビジョンが準備できるのを待ち、公開URLの`/api/health`を確認します。アプリの動作確認は[公開手順](publish.md#4-公開urlで確認する)へ戻って行います。
 

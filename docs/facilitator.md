@@ -6,17 +6,19 @@
 
 配布元のGitHubリポジトリは **Settings → General → Template repository** を有効にします。学生が **Use this template** から新しいリポジトリを作れることを、配布前に確認してください。
 
+配布する変更は、先に配布元の`main`へマージします。テンプレートから新しく作るリポジトリには、未マージのPRの内容は入りません。教材内のPRやCIのリンクは配布元の記録なので、学生チーム自身の成功記録とは区別します。
+
 | 確認対象 | 確認内容 |
 | --- | --- |
 | 学生アカウント | GitHub Educationの認証だけでなく、Copilot Studentが有効でChatが使えること |
 | モデル | 実際の学生アカウントでAutoを選んで応答できること。特定モデル名を操作手順へ追加しない |
 | 残量 | CopilotとCodespacesの現在の残量・制限を各自のアカウント画面で確認する |
-| チームのリポジトリ | テンプレートから作成でき、必要なメンバーがアクセスできること |
+| チームのリポジトリ | テンプレートから作成でき、必要なメンバーがアクセスできること。Azure公開を行う場合は[初期設定](common/azure-setup.md)で所有者・公開範囲とEnvironmentの利用条件も確認する |
 | Codespaces | 新規作成からNode 24、npm ci、画面とAPIの4280のプレビューまで通ること |
 | Copilot app | Git・Node 24・Appの準備、clone、設定受け入れ、Setup、Runが通ること |
 | 資料の引き継ぎ | 企画メモと画面PNGから、product・tasksの整理ができること |
 | 検証 | checkとPlaywright ChromiumのE2E、CIで本番用コンテナのE2Eを実行できること。人のブラウザ確認も行うこと |
-| 公開 | PC・Codespacesで確認・発表できること。Azure公開を行う場合は初回設定とPR→CI→マージ→Container Apps公開→公開URL確認まで通ること |
+| 公開 | PC・Codespacesで確認・発表できること。Azure公開を行う場合は新しいチームリポジトリのOIDC情報で初回設定し、PR→CI→マージ→Container Apps公開→公開URL確認まで通ること |
 
 利用枠の数値はアカウントや提供条件で変わるため、過去の配布資料の数字だけで参加可否を判断しません。[Copilot設定](https://github.com/settings/copilot)、GitHubの **Settings → Billing and licensing**、[Codespaces一覧](https://github.com/codespaces)と[公式プラン説明](https://docs.github.com/en/copilot/get-started/plans)を確認します。
 

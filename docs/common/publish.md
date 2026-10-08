@@ -28,7 +28,7 @@
 
 `publish`には`ENABLE_CONTAINER_PUBLISH=true`、`deploy`にはさらに`ENABLE_AZURE_DEPLOY=true`とAzure接続設定が必要です。デプロイは`main`だけで動きます。
 
-初期設定の直後など、コードを変更せずに実行したい場合は **Actions → Check → Run workflow** でブランチを **main** にして実行します。PRのテスト成功だけではAzureへの公開は完了していません。
+初期設定の直後など、コードを変更せずに実行したい場合は **Actions → Check → Run workflow** でブランチを **main** にし、**OIDC接続情報だけ表示するチェックを外して**実行します。チェックを入れた場合は初期設定用の`oidc-setup`だけが動き、テスト・公開・デプロイは行いません。PRのテスト成功だけではAzureへの公開は完了していません。
 
 ## 4. 公開URLで確認する
 
@@ -52,8 +52,11 @@
 | --- | --- |
 | `check`が失敗 | 最初に失敗したステップとログをCopilotへ渡す。テストを省略して公開しない |
 | `publish`／`deploy`がSkipped | 初期設定の有効化変数と、実行ブランチが`main`かを確認 |
+| `oidc-setup`だけが成功し、アプリが更新されない | 手動実行のOIDC表示用チェックを外して、mainで実行し直す |
+| GHCRへのpushが権限エラー | OrganizationのPackagesポリシー。同名パッケージを以前に別の方法で作った場合は、Package settingsのManage Actions accessでチームのリポジトリへWrite権限を与える |
 | イメージを取得できない | GHCRパッケージのPublic設定、イメージ名、Azure側のレジストリ設定 |
-| Azureへのログインに失敗 | 初期設定のID、Federated credentialsのリポジトリと`production`、GitHub Environment設定 |
+| Azureへのログインに失敗 | 初期設定のID、Federated credentialsのSubjectとOIDC表示用実行のSubjectが完全に一致しているか、GitHub Environment設定。設定直後は反映を待って再実行 |
+| `production` Environmentを作れない | リポジトリ所有者のプランと管理権限。Private OrganizationはGitHub Team以上が必要で、学生個人のProでは代用できない |
 | リビジョンが起動しない | Azureのコンテナログ、環境変数、待受ポート8080、外部DB・APIへの接続 |
 | 公開後に機能が動かない | 公開URLで再現する操作・エラーと、Actionsの実行URLをCopilotへ渡す |
 

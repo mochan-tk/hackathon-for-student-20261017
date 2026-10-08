@@ -31,6 +31,8 @@ export default defineConfig({
   webServer: externalBaseURL ? undefined : {
     command: 'npm run build && npm run preview',
     url: baseURL,
+    // .envや端末側のPORT/HOSTが、テスト専用の接続先を上書きしないようにする。
+    env: { PORT: '4281', HOST: '127.0.0.1' },
     reuseExistingServer: false,
     timeout: 120_000,
   },
