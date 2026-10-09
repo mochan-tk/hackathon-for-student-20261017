@@ -1,4 +1,4 @@
-# 学生ハッカソン開発スターター
+# 学生ハッカソン：初心者向けスターター
 
 アイデアを、確かめられるアプリへ。
 
@@ -6,12 +6,16 @@
 
 ## はじめる
 
+このブランチは **初心者向け（`codex/beginner-starter`）**です。React・TypeScript・Vite・Node.jsと、起動・テスト・任意のコンテナ公開を用意しています。アプリの機能と画面は自分たちで決められます。アプリのひな形を使わず構成から選びたい場合は、配布元の[`main`コース](https://github.com/mochan-tk/hackathon-for-student-20261017/tree/main)を使います。
+
+最初に[はじめ方を選ぶ](docs/choose-start.md)へ進み、チーム用リポジトリを作ります。初心者向けは **Include all branches** でコピーし、チーム側のデフォルトブランチを **`codex/beginner-starter`** に変更してから、次の環境ガイドへ進んでください。
+
 | 使う環境 | 最初に開くガイド | 準備 |
 | --- | --- | --- |
 | Codespaces + VS Code Copilot Chat | [Codespacesで進める](docs/codespaces.md) | GitHubとCopilotが使えるアカウント、ブラウザ |
 | GitHub Copilot app | [Copilot appで進める](docs/copilot-app.md) | 同じアカウント、Git、Node.js 24 LTS、Copilot app |
 
-チームごとに[このテンプレートからリポジトリを作成](https://github.com/mochan-tk/hackathon-for-student-20261017/generate)します。GitHub Copilot StudentとGitHub Proを利用する想定です。権利の有効化と利用残量は事前にアカウント画面で確認してください。
+チームのリポジトリ作成とコース選択は上の手順で一度行います。GitHub Copilot StudentとGitHub Proを利用する想定です。権利の有効化と利用残量は事前にアカウント画面で確認してください。
 
 Azureへの自動公開まで行う場合は、[初期設定](docs/common/azure-setup.md)にあるリポジトリの所有者・公開範囲の条件も確認してください。Organization所有のPrivateリポジトリでは、学生個人のGitHub Proだけでは公開に使うEnvironmentを利用できません。
 

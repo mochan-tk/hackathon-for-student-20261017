@@ -110,7 +110,7 @@ Anthropicの[Prompting best practices](https://platform.claude.com/docs/en/build
 | `npm run dev` | 画面とAPIを起動し、編集した結果を操作して見られる |
 | `npm run check`・`npm run test:e2e` | 機械で確かめられる条件を繰り返し検証する |
 | [runtimeテスト](../../tests/runtime.spec.ts)と、企画に合わせて更新・追加するテスト | 配信の基本動作を残しながら、自分たちのDoDを検証する |
-| [Checkワークフロー](../../.github/workflows/check.yml) | 本番用コンテナでテストし、公開を有効にしたmainでは同じイメージを配置する |
+| [Checkワークフロー](../../.github/workflows/check.yml) | 本番用コンテナでテストし、公開を有効にしたチームのデフォルトブランチでは同じイメージを配置する |
 | [失敗時のtrace・画面](verification.md#自動テストが失敗したら) | どの操作で期待と違ったかを調べ、修正に必要な情報を戻す |
 | [別の学生による操作確認](verification.md) | テストの期待値自体の間違いや、使いにくさを見つける |
 

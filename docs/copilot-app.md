@@ -1,6 +1,6 @@
 # GitHub Copilot appで作る
 
-GitHub Copilot appをPCに入れ、手元のファイルを編集する手順です。動作確認は、PCで開発サーバーを起動して行うか、GitHubへpushした変更をCodespacesで取り込んで行うかを選べます。普段の開発にDockerは不要です。企画資料、完成条件、テスト、Azure Container Appsへの公開手順は[Codespacesの手順](codespaces.md)と共通です。
+**初心者向けスターターの手順です。** GitHub Copilot appをPCに入れ、手元のファイルを編集する手順です。動作確認は、PCで開発サーバーを起動して行うか、GitHubへpushした変更をCodespacesで取り込んで行うかを選べます。普段の開発にDockerは不要です。企画資料、完成条件、テスト、Azure Container Appsへの公開手順は[Codespacesの手順](codespaces.md)と共通です。
 
 **企画 → PCの準備 → 計画 → 実装と検証 → チームで確認 → 公開**
 
@@ -32,10 +32,10 @@ Copilot appによる編集はPC上で行います。Codespacesで動作確認す
 Azureへの自動公開まで行う場合、Publicリポジトリ、またはGitHub Proの個人アカウント所有のPrivateリポジトリで進められます。Organization所有のPrivateリポジトリではOrganizationのGitHub Team以上が必要です。[公開の初期設定](common/azure-setup.md)を参照してください。
 
 1. [企画の進め方](common/ideation.md)の手順1〜5で、誰の何を解決するかと画面案をチームで決めます。手順6の文書整理は、環境を準備した後、このガイドの手順4で行います。
-2. [教材のGitHubページ](https://github.com/mochan-tk/hackathon-for-student-20261017)で **Use this template → Create a new repository** を選び、チーム用リポジトリを作ります。すでに作ったものがある場合は、そのリポジトリを使います。
+2. [はじめ方を選ぶ](choose-start.md)に沿って、**Include all branches** でチーム用リポジトリを作り、チーム側のデフォルトブランチを **`codex/beginner-starter`** にします。準備済みなら、そのリポジトリを使います。
 3. チームのほかのメンバーも編集する場合は、リポジトリ所有者が **Settings → Collaborators** から招待し、各メンバーが招待を受け入れます。
 4. Copilot appを開き、**Sign in to GitHub** で今回使う学生アカウントにログインします。
-5. **Projects** 横の追加ボタンから **GitHub repository** を選び、チームのリポジトリを選択してcloneします。
+5. **Projects** 横の追加ボタンから **GitHub repository** を選び、チームのリポジトリを選択してcloneします。表示されるブランチが`codex/beginner-starter`で、READMEが初心者向けになっていることを確認します。
 6. そのプロジェクトで新しいsessionを作り、実行場所を **Local repository**（版によっては **Current checkout**）、モードを **Interactive**、モデルを **Auto** にします。特定モデルを選ぶ手順はありません。
 7. 最初に「README.mdを読み、この教材の構成を確認してください。まだファイルを編集せず待ってください」と送ってsessionを開始します。
 
@@ -47,7 +47,7 @@ Autoが表示されない、利用権利や利用上限の表示が出る場合�
 
 リポジトリ設定の確認が表示されたら、[.github/github-app.yml](../.github/github-app.yml)を確認して受け入れます。教材の **Setup** は依存関係のインストール、**Run** は `npm run dev` を通じたViteとNode.jsのAPIの起動に使います。Runのコマンドはこの設定ファイルに登録済みです。設定の受け入れ前は適用されず、設定ファイルが更新された場合も受け入れ直します。[設定の公式説明](https://docs.github.com/en/copilot/reference/github-copilot-app-reference/repository-configuration)
 
-Appが作業用ブランチを作成済みの場合は、そのブランチを使います。まだ `main` で作業している場合は、Terminalを開いて次で作業用ブランチを作ります。session開始後にチャットで `/terminal` と入力しても開けます。
+Appが選んだコースから作業用ブランチを作成済みの場合は、そのブランチを使います。まだチームのデフォルトブランチ（`codex/beginner-starter`）で作業している場合は、Terminalを開いて次で作業用ブランチを作ります。session開始後にチャットで `/terminal` と入力しても開けます。
 
 ```sh
 git switch -c feat/first-demo
@@ -176,7 +176,7 @@ MCPの追加は必須ではありません。AIがBrowserを操作できない�
 
 ### Codespacesへ変更を渡して確認する
 
-この手順は、実装中に何度も使います。**Codespacesで確かめたい変更ができたら、その場で学生がCopilot appの画面からcommit・pushします。アプリ全体の完成や、最後のPR作成まで待つ必要はありません。** このcommit・pushは、動作確認するコードをCodespacesへ渡すためのものです。確認結果は実行後に記録し、`main`への統合は手順7で行います。
+この手順は、実装中に何度も使います。**Codespacesで確かめたい変更ができたら、その場で学生がCopilot appの画面からcommit・pushします。アプリ全体の完成や、最後のPR作成まで待つ必要はありません。** このcommit・pushは、動作確認するコードをCodespacesへ渡すためのものです。確認結果は実行後に記録し、チームのデフォルトブランチへの統合は手順7で行います。
 
 PCとCodespacesのファイルは自動同期されません。**同じチームリポジトリの同じ作業ブランチ**を使います。
 
@@ -207,7 +207,7 @@ PCとCodespacesのファイルは自動同期されません。**同じチーム
 1. **Changes** で、採用したい変更になっているか確認します。
 2. 上の[GUIで変更を渡す手順](#codespacesへ変更を渡して確認する)の1〜4と同じ操作で、残っている変更や検証記録をcommit・pushし、GitHubへの反映を確認します。PCで動作確認した場合もこの操作を使います。すべて送信済みなら次へ進みます。
 3. **Create PR** が表示されている場合は、そこからPRを作れます。表示されない場合は、push後にGitHubのチームリポジトリで **Compare & pull request** を使います。
-4. チームで差分、確認結果、CIを確認して `main` へマージします。
+4. PRの **baseがチームのデフォルトブランチ（`codex/beginner-starter`）、compareが作業ブランチ**になっていることを確かめます。チームで差分、確認結果、CIを確認してマージします。コピーされた`main`コースへはPRを作りません。
 5. 継続して使えるURLが必要になったら、[Azure Container Appsへの公開手順](common/publish.md)へ進み、公開URLで改めて操作します。GitHub Actionsで本番用コンテナをテストしてから公開するため、PCへのDocker導入は必須ではありません。PCやCodespacesでの動作確認までなら、Azureへのデプロイは不要です。
 
 サーバーを終了するときは、動かしているTerminalで `Ctrl+C` を押します。Codespacesを使った場合は、[Codespaces一覧](https://github.com/codespaces)から **Stop codespace** も選びます。

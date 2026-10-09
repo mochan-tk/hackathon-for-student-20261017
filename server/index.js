@@ -56,7 +56,7 @@ app.use(async (request, response, next) => {
     const html = await vite.transformIndexHtml(request.originalUrl, template)
     response.type('html').send(html)
   } else {
-    response.sendFile(join(root, 'dist', 'index.html'))
+    response.sendFile('index.html', { root: join(root, 'dist') })
   }
 })
 

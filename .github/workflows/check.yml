@@ -2,7 +2,7 @@ name: Check
 
 on:
   push:
-    branches: [main]
+    branches: [main, codex/beginner-starter]
   pull_request:
   workflow_dispatch:
     inputs:
@@ -16,12 +16,12 @@ permissions:
 
 concurrency:
   group: check-${{ github.ref }}
-  # A newer PR check may replace an older one; do not interrupt a main deployment.
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  # A newer PR check may replace an older one; do not interrupt a deployment from the team default branch.
+  cancel-in-progress: ${{ github.ref != format('refs/heads/{0}', github.event.repository.default_branch) }}
 
 jobs:
   oidc-setup:
-    if: github.event_name == 'workflow_dispatch' && inputs.show_azure_oidc && github.ref == 'refs/heads/main'
+    if: github.event_name == 'workflow_dispatch' && inputs.show_azure_oidc && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-latest
     timeout-minutes: 5
     environment: production
@@ -66,7 +66,7 @@ jobs:
       LOCAL_IMAGE: student-hackathon:${{ github.sha }}
     steps:
       - name: Check publish and deploy switches
-        if: github.ref == 'refs/heads/main' && vars.ENABLE_AZURE_DEPLOY == 'true' && vars.ENABLE_CONTAINER_PUBLISH != 'true'
+        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && vars.ENABLE_AZURE_DEPLOY == 'true' && vars.ENABLE_CONTAINER_PUBLISH != 'true'
         run: |
           echo '::error::Azure deployment requires ENABLE_CONTAINER_PUBLISH=true as well. See docs/common/publish.md.'
           exit 1
@@ -120,10 +120,10 @@ jobs:
         if: always()
         run: docker rm --force app-under-test || true
       - name: Save the tested image for publishing
-        if: github.ref == 'refs/heads/main' && vars.ENABLE_CONTAINER_PUBLISH == 'true'
+        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && vars.ENABLE_CONTAINER_PUBLISH == 'true'
         run: docker save --output "$RUNNER_TEMP/tested-image.tar" "$LOCAL_IMAGE"
       - name: Upload the tested image
-        if: github.ref == 'refs/heads/main' && vars.ENABLE_CONTAINER_PUBLISH == 'true'
+        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && vars.ENABLE_CONTAINER_PUBLISH == 'true'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: tested-image
@@ -134,7 +134,7 @@ jobs:
 
   publish:
     needs: check
-    if: github.ref == 'refs/heads/main' && vars.ENABLE_CONTAINER_PUBLISH == 'true'
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && vars.ENABLE_CONTAINER_PUBLISH == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -173,7 +173,7 @@ jobs:
 
   deploy:
     needs: publish
-    if: github.ref == 'refs/heads/main' && vars.ENABLE_AZURE_DEPLOY == 'true'
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && vars.ENABLE_AZURE_DEPLOY == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment: production

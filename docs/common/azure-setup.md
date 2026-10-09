@@ -1,5 +1,7 @@
 # Container Appsへ公開するための初期設定
 
+この初心者向けコースでは、[選択手順](../choose-start.md)で設定した **`codex/beginner-starter`** がチームのデフォルトブランチです。以下のPRの統合先、手動実行のブランチ、Environmentの許可ブランチには、その名前を使います。
+
 チームの代表者が運営・メンターと一度行う準備です。準備後は、学生はGitHubのPRをマージする操作で更新できます。対象は通常の **Azure Container Apps（Consumption）**です。
 
 必要なのは、チームリポジトリの設定変更権限、Azureでリソースを作成する権限とロールを割り当てる権限です。使うサブスクリプションとチーム用リソースグループを決めます。学生クレジットは利用できるサービス・リージョン・残量を確認して使います。[Azure for Students](https://azure.microsoft.com/en-us/pricing/offers/ms-azr-0170p/)
@@ -8,9 +10,9 @@ GitHubの **Environment** を使います。Publicリポジトリ、またはGit
 
 ## 1. テスト済みコンテナをGitHubへ保存する
 
-1. チームのリポジトリの`main`に、この教材の`.github/workflows/check.yml`と`Dockerfile`があることを確認します。テンプレートから作成した直後ならそのまま進めます。公開したいアプリの変更が作業ブランチにある場合は、確認済みのPRを`main`へマージします。
+1. チームのリポジトリのデフォルトブランチに、この教材の`.github/workflows/check.yml`と`Dockerfile`があることを確認します。テンプレートから作成した直後ならそのまま進めます。公開したいアプリの変更が作業ブランチにある場合は、確認済みのPRをチームのデフォルトブランチへマージします。
 2. GitHubの **Settings → Secrets and variables → Actions → Variables → New repository variable** で、`ENABLE_CONTAINER_PUBLISH`を値`true`で追加します。`ENABLE_AZURE_DEPLOY`はまだ設定しません。
-3. **Actions → Check → Run workflow** で **main** を選び、**初期設定用: Azureへ登録するOIDC接続情報だけ表示する**のチェックは外したまま実行します。
+3. **Actions → Check → Run workflow** で **チームのデフォルトブランチ** を選び、**初期設定用: Azureへ登録するOIDC接続情報だけ表示する**のチェックは外したまま実行します。
 4. `check`と`publish`が成功したら、実行の **Summary → Tested container image** を開きます。`Tag`に表示される`ghcr.io/所有者/リポジトリ:タグ`を次節で使います。このイメージは本番コンテナでのブラウザテストを通っています。
 5. リポジトリの **Packages**、または所有者のプロフィール／Organizationの **Packages** から、このコンテナパッケージを開きます。**Package settings → Change visibility → Public** にします。新規パッケージは通常Privateなので、初回に切り替えます。OrganizationのポリシーでPublicへ変更できない場合は、運営と所有者・公開方法を決めてから進めます。
 
@@ -44,8 +46,8 @@ Consumptionには月ごとの無料枠があり、0レプリカではコンテ�
 
 長期間使うクライアントシークレットを作らず、**OpenID Connect（OIDC）**で接続します。ここで作るIDは、GitHub Actionsがアプリを更新するためのものです。
 
-1. GitHubの **Settings → Environments → New environment** で`production`を作ります。**Deployment branches and tags → Selected branches and tags → Add deployment branch or tag rule**で、Ref typeを **Branch**、名前を`main`にして追加します。
-2. **Actions → Check → Run workflow**で **main** を選び、**初期設定用: Azureへ登録するOIDC接続情報だけ表示する**にチェックを入れて実行します。今回は`oidc-setup`だけが動きます。Azureへのログイン、コンテナの公開、デプロイは行いません。成功した実行の **Summary → Azure OIDC setup** にある **Issuer / Subject / Audience** を控えます。トークンそのものは表示されません。
+1. GitHubの **Settings → Environments → New environment** で`production`を作ります。**Deployment branches and tags → Selected branches and tags → Add deployment branch or tag rule**で、Ref typeを **Branch**、名前にチームのデフォルトブランチ名（`codex/beginner-starter`）を入力して追加します。
+2. **Actions → Check → Run workflow**で **チームのデフォルトブランチ** を選び、**初期設定用: Azureへ登録するOIDC接続情報だけ表示する**にチェックを入れて実行します。今回は`oidc-setup`だけが動きます。Azureへのログイン、コンテナの公開、デプロイは行いません。成功した実行の **Summary → Azure OIDC setup** にある **Issuer / Subject / Audience** を控えます。トークンそのものは表示されません。
 3. Azure portalの **Managed Identities** で、チームのリソースグループに **User assigned managed identity** を作ります。Overviewにある **Client ID**、**Subscription ID** を控えます。**Tenant ID** は **Microsoft Entra ID → Overview** で確認できます。
 4. そのIDの **Federated credentials → Add credential** を開き、シナリオは **Other issuer** を選びます。手順2の **Issuer / Subject / Audience** をそれぞれそのまま入力し、Nameは`github-production`などにして追加します。Subjectは大文字・小文字、数字のID、末尾の`environment:production`まで一致させます。
 5. チーム用リソースグループの **Access control (IAM) → Add role assignment** で、このIDへ **Contributor** を割り当てます。割り当て先の範囲はそのチームのリソースグループです。権限不足の場合は、割り当て可能な運営・管理者に依頼します。
@@ -66,7 +68,7 @@ GitHubの **Settings → Secrets and variables → Actions → Variables** に�
 | `ENABLE_CONTAINER_PUBLISH` | `true`（手順1で設定済み） |
 | `ENABLE_AZURE_DEPLOY` | `true` |
 
-**Actions → Check → Run workflow → main** で、**OIDC接続情報だけ表示するチェックを外して**実行します。`check` → `publish` → `deploy`が成功し、Summaryに公開URLが表示されれば初期設定は完了です。以降は`main`へのマージで同じ流れが動きます。
+**Actions → Check → Run workflow → チームのデフォルトブランチ** で、**OIDC接続情報だけ表示するチェックを外して**実行します。`check` → `publish` → `deploy`が成功し、Summaryに公開URLが表示されれば初期設定は完了です。以降はチームのデフォルトブランチへのマージで同じ流れが動きます。
 
 `deploy`は既存アプリへテスト済みイメージのdigestを指定して更新します。Single revision modeで新しいリビジョンが準備できるのを待ち、公開URLの`/api/health`を確認します。アプリの動作確認は[公開手順](publish.md#4-公開urlで確認する)へ戻って行います。
 

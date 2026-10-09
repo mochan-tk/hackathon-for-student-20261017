@@ -1,6 +1,6 @@
 # Codespacesで作る
 
-ブラウザの中でVS CodeとGitHub Copilotを使う手順です。PCへのNode.jsやDockerのインストールは不要です。Codespace内で画面とAPIを動かして確認し、必要になったらAzure Container Appsへ公開します。
+**初心者向けスターターの手順です。** ブラウザの中でVS CodeとGitHub Copilotを使います。PCへのNode.jsやDockerのインストールは不要です。Codespace内で画面とAPIを動かして確認し、必要になったらAzure Container Appsへ公開します。
 
 **企画 → 環境準備 → 計画 → 実装と検証 → チームで確認 → 公開**
 
@@ -9,15 +9,15 @@
 Azureへの自動公開まで行う場合、Publicリポジトリ、またはGitHub Proの個人アカウント所有のPrivateリポジトリで進められます。Organization所有のPrivateリポジトリではOrganizationのGitHub Team以上が必要です。[公開の初期設定](common/azure-setup.md)を参照してください。
 
 1. [企画の進め方](common/ideation.md)の手順1〜5で、誰の何を解決するかと画面案をチームで決めます。手順6の文書整理は、環境を準備した後、このガイドの手順4で行います。
-2. [教材のGitHubページ](https://github.com/mochan-tk/hackathon-for-student-20261017)で **Use this template → Create a new repository** を選びます。既にチーム用リポジトリを作っている場合は、そのリポジトリを使います。
-3. チームの代表者のアカウント、または利用できるOrganizationを所有者にして作成します。チーム全員が編集する場合は、リポジトリの **Settings → Collaborators** からメンバーを追加します。
+2. [はじめ方を選ぶ](choose-start.md)に沿って、**Include all branches** でチーム用リポジトリを作り、チーム側のデフォルトブランチを **`codex/beginner-starter`** にします。準備済みなら、そのリポジトリを使います。
+3. チーム全員が編集する場合は、リポジトリの **Settings → Collaborators** からメンバーを追加します。選択手順で招待済みなら追加し直す必要はありません。
 4. 以降は、作成したチームのリポジトリを開いて作業します。
 
 最初の実装は一人が操作し、ほかのメンバーが企画・画面・動作を確認すると進めやすくなります。複数人が編集する場合は、それぞれ別のブランチを使います。
 
 ## 2. Codespaceを開く
 
-1. チームのリポジトリで **Code → Codespaces → Create codespace on main** を選びます。マシンを選べる場合は、まず2-coreを使います。
+1. チームのリポジトリでブランチが **`codex/beginner-starter`** になっていることを確認し、**Code → Codespaces → Create codespace on codex/beginner-starter** を選びます。マシンを選べる場合は、まず2-coreを使います。
 2. ブラウザにVS Codeが開き、準備が終わるまで待ちます。
 3. Copilot Chatを開き、今回使う学生アカウントでサインインしていることを確認します。**Session Target** が表示される場合は **Local** を選び、開いているCodespaceのファイルとTerminalを使うチャットで進めます。
 4. GitHubの[Copilot設定](https://github.com/settings/copilot)で **Copilot Student** の利用権利を確認します。Chatのモデルは **Auto** を使います。特定モデルを選ぶ手順はありません。
@@ -26,7 +26,7 @@ Azureへの自動公開まで行う場合、Publicリポジトリ、またはGit
 
 **Restricted Mode（制限モード）**や信頼の確認が表示された場合は、今回のチームのリポジトリであることと内容を確認して、このワークスペースを信頼します。制限モードではTerminalやAIエージェントが使えないことがあります。[Workspace Trust](https://code.visualstudio.com/docs/editing/workspaces/workspace-trust)
 
-Copilot appからpushした変更を確認する場合は、上の `main` の代わりに、その作業ブランチをGitHubで選んでからCodespaceを作成します。
+Copilot appからpushした変更を確認する場合は、上の `codex/beginner-starter` の代わりに、その作業ブランチをGitHubで選んでからCodespaceを作成します。
 
 以下の **Plan → Agent** は、VS CodeのLocalセッションの操作です。ここでのLocalはチャットの種類を指し、PCへのNode.js導入は必要ありません。[VS Codeのセッションの違い](https://code.visualstudio.com/docs/agents/run/agent-harnesses)
 
@@ -53,7 +53,7 @@ Node.jsは **24.x** を使います。最後のコマンドはサーバーを動
 
 Copilot appからの確認用に作業ブランチを開いている場合は、そのまま使い、[Appの確認手順](copilot-app.md#codespacesへ変更を渡して確認する)へ戻ります。
 
-サーバーとは別のターミナルを開きます。
+左下のブランチ名が選んだコースの`codex/beginner-starter`であることを確認し、サーバーとは別のターミナルを開きます。
 
 ```sh
 git switch -c feat/first-demo
@@ -161,7 +161,7 @@ npx playwright install --with-deps chromium
 
 **Source Control** で変更ファイルを選んで差分を確認し、採用するファイルの `+` を押してステージします。コミットメッセージを入力して **Commit** を選び、そのままGitHubへ送ります。初回は **Publish Branch**、公開済みの作業ブランチでは **Source Control → … → Push** を使います。Copilotには変更内容の説明やコミットメッセージ案を相談できます。[CodespacesのGUI操作の公式手順](https://docs.github.com/en/codespaces/developing-in-a-codespace/using-source-control-in-your-codespace)
 
-GitHubのチームリポジトリで **Compare & pull request** を開き、`main` へのPRを作ります。チームで変更とCIの結果を確認してマージします。CIには本番用コンテナを起動して行うテストも含まれます。Codespacesでの開発・動作確認までなら、Azureへのデプロイは不要です。継続して使えるURLが必要になったら、[Azure Container Appsへの公開手順](common/publish.md)へ進みます。公開後も実際のURLで動作を確認します。
+GitHubのチームリポジトリで **Compare & pull request** を開き、**baseがチームのデフォルトブランチ（`codex/beginner-starter`）、compareが作業ブランチ**になっているPRを作ります。コピーされた`main`コースへはPRを作りません。チームで変更とCIの結果を確認してマージします。CIには本番用コンテナを起動して行うテストも含まれます。Codespacesでの開発・動作確認までなら、Azureへのデプロイは不要です。継続して使えるURLが必要になったら、[Azure Container Appsへの公開手順](common/publish.md)へ進みます。公開後も実際のURLで動作を確認します。
 
 公開前に自分たちでコンテナを操作したい場合は、[Codespacesでのコンテナ確認](common/local-development.md#コンテナで確認する任意)を使えます。日々の編集は引き続き `npm run dev` で進められます。
 

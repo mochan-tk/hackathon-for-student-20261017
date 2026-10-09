@@ -1,5 +1,7 @@
 # 動くアプリで発表し、Container Appsへ公開する
 
+この初心者向けコースでは、[選択手順](../choose-start.md)で設定した **`codex/beginner-starter`** がチームのデフォルトブランチです。以下のPRの統合先、手動実行のブランチ、Environmentの許可ブランチには、その名前を使います。
+
 普段は[共通の開発手順](local-development.md)でPC・Codespacesのアプリを起動します。Copilot appでは **Run → Browser**、Codespacesでは **4280の転送先**で確認・発表できます。継続して使えるURLが必要になったら、**Azure Container Apps**へ公開します。
 
 公開するのは、Reactの画面とNode.jsのAPIをまとめた1つのコンテナです。GitHub Actionsが本番コンテナを起動してブラウザテストを行い、成功した**同じイメージ**をGitHub Container Registry（GHCR）へ保存してAzureへ渡します。PCへのDockerのインストールは必須ではありません。
@@ -12,15 +14,15 @@
 
 ## 2. GitHubへ変更を渡す
 
-今回の変更と検証記録をすでに保存・pushし、確認して`main`へマージ済みなら、次の「3. 自動テストとデプロイを待つ」へ進みます。
+今回の変更と検証記録をすでに保存・pushし、確認してチームのデフォルトブランチへマージ済みなら、次の「3. 自動テストとデプロイを待つ」へ進みます。
 
 1. [完成確認](verification.md)を終えます。
 2. 確認後に残っている変更や検証記録をcommit・pushします。Copilot appの場合は[AppのGUI手順](../copilot-app.md#codespacesへ変更を渡して確認する)の1〜4、Codespacesの場合は[保存の手順](../codespaces.md#7-保存し必要になったら公開する)を使います。保存・push済みなら、この操作は不要です。
-3. GitHubでPRを作り、**Check** の成功、画面の操作結果、チームの完成条件を確認して`main`へマージします。作成済みのPRがあれば、そのPRを使います。
+3. GitHubでPRを作り、**Check** の成功、画面の操作結果、チームの完成条件を確認してチームのデフォルトブランチへマージします。作成済みのPRがあれば、そのPRを使います。
 
 ## 3. 自動テストとデプロイを待つ
 
-リポジトリの **Actions → Check** で、`main`へのマージ後の実行を開きます。
+リポジトリの **Actions → Check** で、チームのデフォルトブランチへのマージ後の実行を開きます。
 
 | ジョブ | 行うこと |
 | --- | --- |
@@ -28,9 +30,9 @@
 | `publish` | テストに使ったコンテナを再ビルドせずGHCRへ保存 |
 | `deploy` | 保存済みイメージを、既存のContainer Appへデプロイして起動確認 |
 
-`publish`には`ENABLE_CONTAINER_PUBLISH=true`、`deploy`にはさらに`ENABLE_AZURE_DEPLOY=true`とAzure接続設定が必要です。デプロイは`main`だけで動きます。
+`publish`には`ENABLE_CONTAINER_PUBLISH=true`、`deploy`にはさらに`ENABLE_AZURE_DEPLOY=true`とAzure接続設定が必要です。デプロイはチームのデフォルトブランチだけで動きます。
 
-初期設定の直後など、コードを変更せずに実行したい場合は **Actions → Check → Run workflow** でブランチを **main** にし、**OIDC接続情報だけ表示するチェックを外して**実行します。チェックを入れた場合は初期設定用の`oidc-setup`だけが動き、テスト・公開・デプロイは行いません。PRのテスト成功だけではAzureへの公開は完了していません。
+初期設定の直後など、コードを変更せずに実行したい場合は **Actions → Check → Run workflow** でブランチを **チームのデフォルトブランチ** にし、**OIDC接続情報だけ表示するチェックを外して**実行します。チェックを入れた場合は初期設定用の`oidc-setup`だけが動き、テスト・公開・デプロイは行いません。PRのテスト成功だけではAzureへの公開は完了していません。
 
 ## 4. 公開URLで確認する
 
@@ -53,8 +55,8 @@
 | 状況 | 確認する場所 |
 | --- | --- |
 | `check`が失敗 | 最初に失敗したステップとログをCopilotへ渡す。テストを省略して公開しない |
-| `publish`／`deploy`がSkipped | 初期設定の有効化変数と、実行ブランチが`main`かを確認 |
-| `oidc-setup`だけが成功し、アプリが更新されない | 手動実行のOIDC表示用チェックを外して、mainで実行し直す |
+| `publish`／`deploy`がSkipped | 初期設定の有効化変数と、実行ブランチがチームのデフォルトブランチかを確認 |
+| `oidc-setup`だけが成功し、アプリが更新されない | 手動実行のOIDC表示用チェックを外して、チームのデフォルトブランチで実行し直す |
 | GHCRへのpushが権限エラー | OrganizationのPackagesポリシー。同名パッケージを以前に別の方法で作った場合は、Package settingsのManage Actions accessでチームのリポジトリへWrite権限を与える |
 | イメージを取得できない | GHCRパッケージのPublic設定、イメージ名、Azure側のレジストリ設定 |
 | Azureへのログインに失敗 | 初期設定のID、Federated credentialsのSubjectとOIDC表示用実行のSubjectが完全に一致しているか、GitHub Environment設定。設定直後は反映を待って再実行 |

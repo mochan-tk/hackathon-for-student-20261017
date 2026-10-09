@@ -6,14 +6,14 @@
 
 配布元のGitHubリポジトリは **Settings → General → Template repository** を有効にします。学生が **Use this template** から新しいリポジトリを作れることを、配布前に確認してください。
 
-配布する変更は、先に配布元の`main`へマージします。テンプレートから新しく作るリポジトリには、未マージのPRの内容は入りません。教材内のPRやCIのリンクは配布元の記録なので、学生チーム自身の成功記録とは区別します。
+配布する変更は、それぞれの配布用ブランチへ反映します。`main`は自分たちで構成を決めるコース、`codex/beginner-starter`は初心者向けコースです。[コース選択とコピーの手順](choose-start.md)を、どちらも新しいチーム用リポジトリで確認してください。初心者向けは全ブランチをコピーし、チーム側のデフォルトブランチを`codex/beginner-starter`へ変更します。コース間をマージする手順にはしません。作業用ブランチ上の変更は、選択した配布用ブランチへ反映されるまで教材に含まれません。教材内のPRやCIのリンクは配布元の記録なので、学生チーム自身の成功記録とは区別します。
 
 | 確認対象 | 確認内容 |
 | --- | --- |
 | 学生アカウント | GitHub Educationの認証だけでなく、Copilot Studentが有効でChatが使えること |
 | モデル | 実際の学生アカウントでAutoを選んで応答できること。特定モデル名を操作手順へ追加しない |
 | 残量 | CopilotとCodespacesの現在の残量・制限を各自のアカウント画面で確認する |
-| チームのリポジトリ | テンプレートから作成でき、必要なメンバーがアクセスできること。Azure公開を行う場合は[初期設定](common/azure-setup.md)で所有者・公開範囲とEnvironmentの利用条件も確認する |
+| チームのリポジトリ | 選んだコースのファイルをコピーでき、デフォルトブランチの設定が一致し、必要なメンバーがアクセスできること。Azure公開を行う場合は[初期設定](common/azure-setup.md)で所有者・公開範囲とEnvironmentの利用条件も確認する |
 | Codespaces | 新規作成からブラウザ接続、Terminal・Copilot、Node 24、npm ci、画面とAPIの4280のプレビューまで通ること。開発開始前に環境準備の時間を確保する |
 | Copilot app | Git・Node 24・Appの準備、clone、設定受け入れ、Setup、Runが通ること |
 | 資料の引き継ぎ | 企画メモと画面PNGから、product・tasksの整理ができること |
@@ -28,14 +28,14 @@
 
 運営の普段のアカウントや既存環境だけで済ませず、可能なら学生相当の権利と新しい作業環境で試します。
 
-1. [締切管理の例](examples/deadline.md)を使い、[Codespaces](codespaces.md)と[Copilot app](copilot-app.md)をそれぞれ最初からたどります。
+1. 初心者向けのコピーとデフォルトブランチ変更を済ませ、[締切管理の例](examples/deadline.md)を使い、[Codespaces](codespaces.md)と[Copilot app](copilot-app.md)をそれぞれ最初からたどります。
 2. Planで企画と完成条件を確認し、Agent／Interactiveで一つの操作を実装します。
 3. 完成条件に対応する機能テストを確認します。並び替えなど期待値が明確な処理では、未実装時の失敗と実装後の成功も確かめます。
 4. `npm run check`、`npm run test:e2e`、人の操作確認を実施します。
 5. 仕様を一つ変更し、product、tasks、テスト、実装、verificationが一致するところまで戻します。
 6. sessionを終了して再開し、保存されたファイルから作業を継続できるか確認します。
 7. Copilot appのGUIでcommit・pushし、初回はその作業ブランチからCodespaceを作成、再利用時はGUIのPullで取り込んで4280から確認する経路も通します。
-8. CIで本番用コンテナのテストを確認します。[Codespacesでの手動コンテナ確認](common/local-development.md#コンテナで確認する任意)も運営で通します。Azure公開を行う場合はContainer Appsの公開URLを別のブラウザで開き直し、APIや実際の認証も確かめます。
+8. 選んだコースから作った作業ブランチのPRが、チームのデフォルトブランチへ向いていることと、CIで本番用コンテナのテストを確認します。[Codespacesでの手動コンテナ確認](common/local-development.md#コンテナで確認する任意)も運営で通します。Azure公開を行う場合はContainer Appsの公開URLを別のブラウザで開き直し、APIや実際の認証も確かめます。
 
 確認の記録には、日付、OS、VS Code／Appのバージョン、アカウントのプラン、実行経路、成功した項目、失敗・未確認項目を残します。アクセストークン、個人のメールアドレス、私的な会話の原文は記録しません。
 
