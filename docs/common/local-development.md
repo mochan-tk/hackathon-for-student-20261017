@@ -1,104 +1,100 @@
 # PC・Codespacesで動作確認する
 
-普段の開発は **`npm run dev`でViteとNode.jsのAPIを起動**します。PCでもCodespacesでも同じコマンドです。DockerやAzureへのログインは不要です。Codespaces自体の利用時間は消費します。
+`main`コースでは、企画に合わせてアプリを作ってから起動します。**共通の起動コマンドや固定ポートはまだありません。** 選んだ構成の準備・起動・テスト方法は[docs/development.md](../development.md)にまとめます。初心者向けスターターを選んだ場合は、そのブランチの手順を使ってください。
 
-公開時は、ビルド済みの画面とAPIを1つのコンテナにまとめてAzure Container Appsへ配置します。GitHub Actionsがコンテナを起動してテストします。手元でコンテナを確認する手順も、このページの後半にあります。
+## 最初に作るもの
+
+Copilotと構成を決めたら、最初の実装タスクで次を用意します。
+
+1. 利用者が最初の操作を試せる最小アプリと、起動・終了の手順。
+2. 採用した構成に必要な依存関係と、同じ環境を用意する方法。
+3. 最初の完成条件を確認するテストと、その確認をPRで実行するCI。
+4. 実際のコマンド、URL・ポート、必要な環境設定を記録した `docs/development.md`。
+
+HTML中心のアプリなら簡単な配信方法で始められます。画面の状態管理が必要ならReactなど、外部サービスの秘密のキーを扱うならサーバー側の処理など、企画上の理由があるものを追加します。全チームに同じフレームワークやフォルダ構成を作る必要はありません。
 
 ## 起動する
 
-Node.js 24で、リポジトリのルートから実行します。Copilot appでは、初回の **Setup** が終わったら **Run** を押すと `npm run dev` が実行されます。
+**選んだ実行場所**で、`docs/development.md` の準備と起動の手順を実行します。Codespacesだけで実行するチームは、PCにアプリの実行環境を入れる必要はありません。
+
+たとえば **Node.js + npmを選び、package.jsonにdevを作成し、package-lock.jsonも保存した場合**には、次のような手順になります。このコマンドは初期状態には存在せず、他の構成では使いません。
 
 ```sh
 npm ci
 npm run dev
 ```
 
-起動したら、次の入口を開きます。
+アプリが起動したら、次の入口を開きます。
 
 | 実行する場所 | ブラウザで開く場所 |
 | --- | --- |
-| PC（Copilot appなど） | `http://127.0.0.1:4280`。Appでは **Run → Browser** |
-| Codespaces | **Ports → 4280 → Open in Browser** |
+| PC | 起動ログと`docs/development.md`に記録したローカルURL |
+| Codespaces | **Ports → 実際のポート → Open in Browser** |
 
-画面とAPIの入口は同じ4280番です。画面の編集はホットリロードされ、APIの保存時はサーバーが自動で再起動します。反映しない場合は一度停止して起動し直してください。起動を終えるときは実行したターミナルで **Ctrl+C** を押します。
+たとえば4280を選んだなら、PCでは `http://127.0.0.1:4280`、Codespacesでは4280の転送URLです。別のポートを選んだら、その値を使います。初期の開発環境には固定のアプリ用ポートを設定していません。
 
-Codespacesで4280が見えなければ **Forward a Port** で追加します。以前から開いているCodespaceでは **Codespaces: Rebuild Container** で開発環境の変更を反映できます。ポートは **Private** のまま使い、チーム内の手動確認は同じPCで交代して操作できます。転送URLはCodespaceとサーバーの起動中だけ使えます。
+Copilot appの **Setup／Run** ボタンを使う場合は、起動できたコマンドを `.github/github-app.yml` に登録し、Appで設定を確認して受け入れます。初期状態にこの設定はありません。Codespacesでのみ実行する場合は、PC用のSetup／Runを登録する必要はありません。[Appのガイド](../copilot-app.md)
 
-Copilot appで編集し、Codespacesで実行する場合は、**確認したい変更ができるたびに学生がAppの画面でcommit・pushします。** 初回はその作業ブランチからCodespaceを作成し、2回目以降はCodespacesの **Source Control → … → Pull** で変更を取り込んでから確認します。詳しくは[Appのガイド](../copilot-app.md#codespacesへ変更を渡して確認する)を参照してください。
+アプリを動かしているTerminalは開いたままにし、終了するときは記録した停止方法を使います。手前で起動したサーバーなら通常はそのTerminalで **Ctrl+C** です。依存関係や設定を変更した場合は、必要な準備をやり直して再起動します。
 
-## ビルドしたアプリとテスト
+## Codespacesで開く
 
-公開用の画面とAPIを、Dockerを使わずに確認できます。
+使うポートが **Ports** に表示されなければ **Forward a Port** で追加します。ポートは **Private** のまま使い、チーム内の確認はログイン済みの同じPCで交代して操作できます。URLはCodespaceとサーバーの起動中だけ使えます。
 
-```sh
-npm run build
-npm run preview
-```
+採用した開発サーバーが接続先のホスト名を制限している場合は、実際のCodespacesのホストを必要な範囲で許可します。Viteなどのホットリロードも採用構成に合わせて設定し、ホスト制限を全面的に解除するだけで解決しないでください。
 
-PCでは `http://127.0.0.1:4281`、Codespacesでは **Ports → 4281 → Open in Browser** を開きます。4281が表示されなければ **Forward a Port** で追加します。Node.jsサーバーが `dist/` の画面と `/api` を配信します。画面を変更した後は再ビルドが必要です。コンテナ内では同じサーバーが起動し、8080番で受け付けます。Dockerを使わず本番サーバーを起動する場合も、先に `npm run build` を実行してから `npm start` を使います。
+開発環境の設定を変更した場合は、必要に応じて **Codespaces: Rebuild Container** で反映します。Node.js 24とDockerを使える環境は用意していますが、選んだ言語・ツール・ブラウザテストの依存関係は別途準備します。
 
-PCでブラウザテストを初めて実行するときは、次を一度実行します。Codespacesでは開発環境の初回準備に含まれています。
+Copilot appで編集した変更は、**確認したい変更ができるたびに学生がAppのGUIでcommit・pushします。** 初回はその作業ブランチからCodespaceを作り、2回目以降は **Source Control → … → Pull** で取り込みます。[変更を渡す詳しい手順](../copilot-app.md#codespacesへ変更を渡して確認する)
 
-```sh
-npx playwright install chromium
-```
+## テストと本番相当の確認
 
-Linuxでブラウザの依存ライブラリが足りない場合は `npx playwright install --with-deps chromium` を使います。
+`docs/development.md` に記録した確認を実行し、実際の結果を[検証記録](../verification.md)へ残します。採用構成に応じて、型・lint・ビルド、機能テスト、ブラウザ操作などから必要な確認を選びます。小さなアプリに不要な道具を一式追加する必要はありません。
 
-E2Eは自分でビルドし、4281番に本番用のNode.jsサーバーを起動して、PC・スマートフォン幅の操作とAPIの応答を確認します。手動の `npm run preview` が動いていたら **Ctrl+C** で止めてから、次を実行してください。開発用4280番は動かしたままで構いません。その場合は別のターミナルを使います。
+たとえば **npmのcheckとtest:e2eを実装したチーム**は次のように実行できます。これらの名前は必須ではありません。
 
 ```sh
 npm run check
 npm run test:e2e
 ```
 
-[tests/starter.spec.ts](../../tests/starter.spec.ts)は自分たちの企画の完成条件を確かめるテストへ更新します。[tests/runtime.spec.ts](../../tests/runtime.spec.ts)にある画面配信・404・起動確認APIのテストは残し、その上で機能のテストを追加してください。
+Playwrightを選んだ場合は、ブラウザとOSの依存関係の準備方法も記録します。初期Codespaceが自動でインストールする前提はありません。テストが別のサーバーを起動する場合は、使用するポートと手動サーバーとの重複も確認します。
 
-## API・認証・DBを追加するとき
+CIには、チームで選んだ同じ確認を登録します。GitHub上で実際に実行された結果を確認してください。CIの未作成やskipは合格ではありません。自動テストの成功と、学生が操作してDoDを確かめた結果は分けて記録します。
 
-初期スターターには `GET /api/health` という起動確認用APIがあり、`{"status":"ok"}` を返します。業務用のAPI、DB、ログイン機能は、企画に必要なものを実装します。
+公開用ビルドがある構成では、開発サーバーだけでなくビルド後の起動も確認します。起動方法・ポート・再ビルドのタイミングは `docs/development.md` に残します。
 
-APIは [server/api.js](../../server/api.js) の末尾にある404処理より前に追加し、フロントエンドからは `fetch('/api/エンドポイント名')` のように呼びます。PC・Codespaces・公開先で同じ相対URLを使うため、ブラウザからPCの `localhost` を直接指定する必要はありません。APIの入力チェックと期待する結果もテストに含めます。
+## API・設定・外部サービスを追加するとき
 
-DBや外部AIサービスが必要なら、開発用の接続先またはモックを用意します。共有データや残したいデータには外部DBを使い、コンテナ内のファイルやメモリーを永続保存先にしないでください。認証を追加した場合は、本物のログインと公開先での権限を別途確認します。何を模擬しているかは[検証記録](../verification.md)へ残します。
+API、DB、ログイン機能は必要になったものを作ります。フロントエンドとAPIの接続方法を決め、Codespacesの転送URLでも実際に通信できることを確かめます。同じ入口で配信するなら `/api/...` の相対URLが使えます。別サーバーにする場合は、接続先と必要なCORS設定を明記します。
 
-ローカルのサーバー用設定は、[.env.example](../../.env.example)を参考にリポジトリのルートの `.env` に置けます。`dev`・`preview`・`start` はこのファイルを読み込みます。教材の待受設定を上書きする `PORT`・`HOST` は追加せず、外部サービスなどの設定を入れてください。設定を変えたらサーバーを起動し直します。`.env` はGitやコンテナイメージに含めず、公開先では環境変数・シークレットとして設定します。秘密のAPIキーはサーバー側で使い、フロントエンドや `VITE_` 変数に入れないでください。
+秘密のAPIキーはサーバー側で使います。ブラウザへ配信するコードや、`VITE_` などの公開環境変数へ入れないでください。必要な変数名と説明だけを `.env.example` などへ記録し、実際の値はGitやコンテナイメージに含めません。`.env` を使う場合は、採用したサーバーがどう読み込むかも決めます。
 
-PCからCodespacesへ切り替える場合、`.env` はcommit・push・Pullでは引き継がれません。外部サービスを使う場合は、Codespaces側にも `.env.example` を参考に `.env` を作り、必要な開発用の値を設定してから起動します。公開先の値はAzure側にも別途設定します。
+**PC・Codespaces・GitHub Actions・公開先の設定は自動同期されません。** それぞれ必要な値を設定します。CIは専用のテストデータやモックを使えるようにし、必要な秘密の値はGitHub Actions Secretsなどで管理します。実サービスとの接続、ログイン、保存は別途確認し、モックの結果と区別して記録します。
 
-GitHub Actionsにも、PC・Codespacesの `.env` やAzure側のSecretsは自動では引き継がれません。外部サービスを使う場合は、自動テスト用の応答・モックや専用の接続先を用意し、必要に応じてCIのコンテナ起動設定にも値を渡します。秘密の値はGitHub Actions Secretsなどで管理し、コードやコンテナイメージへ埋め込みません。実サービスへの接続は別途確認し、モックでの結果と区別して[検証記録](../verification.md)へ残します。
+共有・継続保存が必要なデータには用途に合う保存先を選びます。Azure Container Appsに公開する場合、コンテナ内のファイルやメモリーを永続保存先にしないでください。
 
 ## コンテナで確認する（任意）
 
-普段の開発は `npm run dev` で進め、公開前に本番用コンテナの画面とAPIを操作したい場合に使います。PCへのDocker導入は必須ではありません。
+Azure Container Appsへの公開を選ぶ場合は、[公開手順](publish.md)に沿って採用構成用のDockerfileと確認方法を作ります。**`main`の初期状態にはDockerfileがないため、すぐにdocker buildを実行する手順ではありません。**
 
-- **Codespaces**：教材の開発環境にはDocker用の機能を含めています。Codespaces内でアプリ用コンテナを起動するため、PCへのDocker導入は不要です。以前から使っているCodespaceでは、変更を取り込んだ後、コマンドパレットの **Codespaces: Rebuild Container** を実行します。
-- **PC**：Dockerを導入して起動してある場合に実行できます。未導入ならCodespacesまたはGitHub Actionsで確認できます。
+- **Codespaces**：教材にはDocker用の機能を含めています。PCへのDocker導入は不要です。
+- **PC**：Dockerを導入して起動してある場合に確認できます。PCへ導入せず、Codespacesで確認することもできます。
 
-手動のpreviewやE2Eで4281番を使用中なら停止し、リポジトリのルートで次を実行します。
+作成したコンテナのビルド・起動・終了コマンド、ホスト側とコンテナ内のポート、起動確認の方法を `docs/development.md` に記録します。ブラウザで実際に操作し、必要なAPIや機能テストもコンテナに対して行います。変更後は再ビルドして確認します。
 
-```sh
-docker build -t student-hackathon .
-docker run --rm -p 127.0.0.1:4281:8080 student-hackathon
-```
-
-PCでは `http://127.0.0.1:4281`、Codespacesでは **Ports → 4281 → Open in Browser** を開き、画面と `/api/health` を確認します。4281が表示されなければ **Forward a Port** で追加します。Codespacesの公開範囲はPrivateのままで構いません。終了は **Ctrl+C** です。変更後は実行中のコンテナを終了し、再度buildして起動します。日々の編集に使う **Run** はNode.jsによる開発サーバーを起動するため、このDocker操作は別途行います。
-
-外部サービス用の環境変数が必要な場合は、runに `--env-file .env` を追加できます。ファイルに秘密情報があっても、イメージへコピーする必要はありません。
-
-GitHub ActionsではContainer Appsに対応した `linux/amd64` のコンテナをビルドし、そのコンテナに対してブラウザテストを実行します。公開設定が済んでいれば、確認済みのイメージを公開します。PC上のコンテナ確認だけで、AzureのHTTPS・ログイン・外部サービス接続も確認済みとは扱いません。
+公開前には選んだアプリのコンテナを確認し、公開後も実際のURLでHTTPS・ログイン・外部サービス接続などを確認します。開発環境のテストだけで公開先も確認済みとは扱いません。
 
 ## うまくいかないとき
 
 | 状況 | 確認すること |
 | --- | --- |
-| URLが開かない | 起動完了の表示、使っているポートの転送、Codespaceが停止していないか |
-| ポートが使用中 | 自分が前に起動したサーバーを元のターミナルでCtrl+C終了。別のプロセスを無条件に終了しない |
-| 画面が以前のまま | 編集した環境と作業ブランチ、push／pull、previewやコンテナなら再ビルド |
-| 設定・依存を変えて動かない | サーバーを終了し、依存変更時はnpm ciして再起動 |
-| Codespacesでホスト拒否・ホットリロード失敗 | 最新のvite.config.ts、CODESPACE_NAME、GITHUB_CODESPACES_PORT_FORWARDING_DOMAINを確認。allowedHostsをtrueにして回避しない |
-| Dockerが見つからない・接続できない | Codespacesなら開発環境の再構築、PCならDockerの起動を確認。日々の開発はnpm run devで続けられる |
-
-継続して使うURLを作る場合は[公開手順](publish.md)へ進み、公開先でも完成条件を確認します。
+| package.jsonや起動コマンドがない | まだ最小アプリを作る前か。採用構成で必要なものか |
+| URLが開かない | 起動完了の表示、実際のポート転送、Codespaceが停止していないか |
+| ポートが使用中 | 自分が起動したサーバーを元のTerminalで終了する。無関係なプロセスを無条件に終了しない |
+| 画面が以前のまま | 編集環境とブランチ、push／pull、ビルド・コンテナの作り直し |
+| 設定・依存を変えて動かない | 記録した準備と再起動を行ったか |
+| ホスト拒否・ホットリロード失敗 | 採用したサーバーの許可ホスト・接続設定がCodespacesに合っているか |
+| Dockerが見つからない・接続できない | Codespacesなら開発環境の再構築、PCならDockerの起動を確認する |
 
 公式資料：[Codespacesのポート転送](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace) · [Docker用Dev Container Feature](https://github.com/devcontainers/features/tree/main/src/docker-in-docker) · [Container Appsのコンテナ仕様](https://learn.microsoft.com/en-us/azure/container-apps/containers)
