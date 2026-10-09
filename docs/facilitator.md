@@ -14,7 +14,7 @@
 | モデル | 実際の学生アカウントでAutoを選んで応答できること。特定モデル名を操作手順へ追加しない |
 | 残量 | CopilotとCodespacesの現在の残量・制限を各自のアカウント画面で確認する |
 | チームのリポジトリ | テンプレートから作成でき、必要なメンバーがアクセスできること。Azure公開を行う場合は[初期設定](common/azure-setup.md)で所有者・公開範囲とEnvironmentの利用条件も確認する |
-| Codespaces | 新規作成からNode 24、npm ci、画面とAPIの4280のプレビューまで通ること |
+| Codespaces | 新規作成からブラウザ接続、Terminal・Copilot、Node 24、npm ci、画面とAPIの4280のプレビューまで通ること。開発開始前に環境準備の時間を確保する |
 | Copilot app | Git・Node 24・Appの準備、clone、設定受け入れ、Setup、Runが通ること |
 | 資料の引き継ぎ | 企画メモと画面PNGから、product・tasksの整理ができること |
 | 検証 | checkとPlaywright ChromiumのE2E、CIで本番用コンテナのE2Eを実行できること。人のブラウザ確認も行うこと |

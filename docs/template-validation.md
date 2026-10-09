@@ -68,9 +68,31 @@ CIのブラウザテストが失敗した場合、`test-results/`を`playwright-
 
 再監査では `npm ci`、`npm run check`、`npm run test:e2e` を実行し、ブラウザテスト6件が成功しました。依存関係の監査は指摘0件です。`actionlint`、Markdownの相対リンク・見出し、npmスクリプト参照、devcontainer JSON、Skillsのfrontmatterも再確認しました。今回の変更は文書のみで、学生用の企画・作業・検証テンプレートは未入力のままです。
 
+## 課題シートを使ったCodespaces実機リハーサル
+
+10月9日に、教材コミット`7aa1202`を別のPrivateリポジトリへコピーし、提供された締切管理のワークシート記入例から実装しました。未マージの教材変更を検証するためのコピーであり、配布用`main`からテンプレートを作る確認とは区別します。原本PDFはGitへ入れず、記入例の数値と今回の補足判断を分けた要約を入力に使いました。
+
+環境は新規の2-core Codespace、ChromeのVS Code Web、Node.js 24.21.0、npm 11.19.0です。運営アカウントのCopilot **Local / Auto** を使い、実際に **Plan → Agent** を操作しました。学生アカウントの利用権利・残量の検証ではありません。
+
+| 対象 | 実際に確認したこと |
+| --- | --- |
+| 環境準備 | 新規作成、ワークスペース信頼の確認、停止・再開、`npm ci`、`npm run dev`、Privateな4280転送URLでの表示・操作 |
+| 企画の引き継ぎ | Copilotが`prepare-project`と入力資料を読み、3機能・2画面、D01〜D09、T01〜T06を計画。Agentでproduct・tasksへ保存 |
+| 失敗からの実装 | 先に受け入れテスト1件を書き、未実装の空状態で失敗することを確認。実装後の入力欄名の不一致も検出し、修正して同じ主要フローが成功 |
+| 自動確認 | `npm run check`とPC幅・390px幅のE2E計22件が成功。並び順、提出済み、保存と再読込、日本時間の日付境界、空入力・不正日付・戻る、保存失敗時の保持、API・配信を確認 |
+| 独立した操作確認 | 実装を担当したCopilotとは別にCodexが転送URLを操作。順不同3件の昇順表示、対象1件だけの提出済み、再読込、空白入力、取消し、390pxでの登録・長い文字列・当日表示を確認。学生による利用評価とは区別 |
+| GitHubへの保存 | VS Codeのソース管理GUIでステージ・commit・ブランチ発行（push）を実施し、GitHubの画面から[リハーサル用PR](https://github.com/mochan-tk/hackathon-rehearsal-deadline-20261009/pull/1)を作成 |
+| 本番コンテナ | 実装コミット`06b72d1`の[PRのCI](https://github.com/mochan-tk/hackathon-rehearsal-deadline-20261009/actions/runs/37889136308)が成功。本番コンテナのビルド・起動とE2Eを確認。コンテナの公開とAzureへのデプロイは実施していない |
+
+独立したコード・文書レビューでも、D01〜D09の修正必須の不整合は見つかりませんでした。今回のアプリは単一タブで利用するMVPです。`localStorage`を複数タブから同時編集した場合の競合には対応しておらず、この制約をアプリのREADMEと検証記録へ残しました。学生による利用評価を含むT06は検証待ちです。
+
+初回の構築・接続で待ち時間が発生し、同じCodespaceの停止・再開後にTerminalとCopilotが使用可能になりました。`npm ci`自体は今回約13秒でしたが、環境準備全体の所要時間ではありません。この結果から、Codespacesガイドへ準備中の待機・開き直し・停止再開と、信頼確認が表示された場合の説明を補足しました。
+
+依存追加中の開発プレビューに一時的なReactエラーがありましたが、通常の再読込後は再現せず、新しいerror/warnは0件でした。一方、Codespace内部の認証なしブラウザから127.0.0.1の開発サーバーへ接続するとWebSocketエラーを観測しました。Private転送先の認証条件との差が原因の可能性がありますが、原因確定とは扱いません。通常の転送URLでの操作結果と本番サーバーのE2Eは別に確認しています。
+
 ## 配布前に残っている確認
 
-- 新規Codespaceでdevcontainerを構築し、4280の転送から操作・ホットリロード、任意のDockerプレビューを確認する。
+- Codespacesで保存後のホットリロードと、任意のDockerプレビューを確認する。
 - Copilot appでclone、設定受け入れ、Setup、Run、Browser、Changesを通す。
 - Studentアカウントで、企画整理→Plan→実装→完成条件との照合を両経路で通す。
 - Copilot appのGUIでcommit・pushし、CodespacesのGUIでPullして4280から操作する。

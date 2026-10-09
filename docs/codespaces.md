@@ -22,6 +22,10 @@ Azureへの自動公開まで行う場合、Publicリポジトリ、またはGit
 3. Copilot Chatを開き、今回使う学生アカウントでサインインしていることを確認します。**Session Target** が表示される場合は **Local** を選び、開いているCodespaceのファイルとTerminalを使うチャットで進めます。
 4. GitHubの[Copilot設定](https://github.com/settings/copilot)で **Copilot Student** の利用権利を確認します。Chatのモデルは **Auto** を使います。特定モデルを選ぶ手順はありません。
 
+初回は環境の構築と接続に時間がかかります。準備の表示やログが進んでいる間は待ちます。長く進まない場合は、[Codespaces一覧](https://github.com/codespaces)から開き直します。改善しなければ運営と確認して **… → Stop codespace** で停止し、同じCodespaceを再度開きます。[公式の接続トラブル対処](https://docs.github.com/en/codespaces/troubleshooting/troubleshooting-your-connection-to-github-codespaces)
+
+**Restricted Mode（制限モード）**や信頼の確認が表示された場合は、今回のチームのリポジトリであることと内容を確認して、このワークスペースを信頼します。制限モードではTerminalやAIエージェントが使えないことがあります。[Workspace Trust](https://code.visualstudio.com/docs/editing/workspaces/workspace-trust)
+
 Copilot appからpushした変更を確認する場合は、上の `main` の代わりに、その作業ブランチをGitHubで選んでからCodespaceを作成します。
 
 以下の **Plan → Agent** は、VS CodeのLocalセッションの操作です。ここでのLocalはチャットの種類を指し、PCへのNode.js導入は必要ありません。[VS Codeのセッションの違い](https://code.visualstudio.com/docs/agents/run/agent-harnesses)
