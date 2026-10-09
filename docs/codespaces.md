@@ -45,6 +45,8 @@ git switch -c feat/first-demo
 
 Copilot Chatで **Plan** を選び、次を送ります。
 
+Planが見当たらない場合は、サインインを確認して拡張の準備が終わるまで待ち、モードの選択欄を開き直します。
+
 ```text
 目的：
 企画と画面案を整理し、短い開発時間で完成できる最小構成と実装・検証の計画を提案してください。
@@ -112,7 +114,9 @@ docs/product.md、docs/tasks.md、docs/development.mdと、作業に関係する
 
 ポートは **Private** のまま使い、ログイン済みの同じPCで交代して構いません。このURLはCodespaceとサーバーの起動中に使う確認用です。
 
-ブラウザ版Codespacesでは、VS Code Desktopと同じ内蔵Browser Toolsが使えることを前提にしません。採用した構成に必要な自動テストと、人のブラウザ操作で確認できます。Playwrightを選んだ場合は、必要なブラウザのインストールも `docs/development.md` へ記録します。初期環境への自動インストールはありません。
+ブラウザ版Codespacesでは、VS Code Desktopと同じ内蔵Browser Toolsが使えることを前提にしません。採用した構成に必要な自動テストと、人のブラウザ操作で確認できます。
+
+Playwrightを選んだ場合は、ブラウザ本体に加え、LinuxのOS依存パッケージも必要になることがあります。たとえばnpmでPlaywrightを追加し、Chromiumを使う構成なら、初回に `npx playwright install --with-deps chromium` で両方を準備します。採用した構成で実際に使った準備手順を `docs/development.md` へ記録してください。初期環境への自動インストールはありません。[Playwright公式の依存関係の準備](https://playwright.dev/docs/browsers#install-system-dependencies)
 
 同じ変更・同じ環境で直前に成功し、記録済みの自動確認は再実行不要です。未実施の確認や関連する変更がある場合は、記録されたコマンドで確認します。テストの成功だけで全DoDの達成とは扱いません。
 
