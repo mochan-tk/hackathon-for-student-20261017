@@ -31,7 +31,7 @@ Copilot appによる編集はPC上で行います。Codespacesで動作確認す
 
 Azureへの自動公開まで行う場合、Publicリポジトリ、またはGitHub Proの個人アカウント所有のPrivateリポジトリで進められます。Organization所有のPrivateリポジトリではOrganizationのGitHub Team以上が必要です。[公開の初期設定](common/azure-setup.md)を参照してください。
 
-1. [企画の進め方](common/ideation.md)で、誰の何を解決するかをチームで決めます。
+1. [企画の進め方](common/ideation.md)の手順1〜5で、誰の何を解決するかと画面案をチームで決めます。手順6の文書整理は、環境を準備した後、このガイドの手順4で行います。
 2. [教材のGitHubページ](https://github.com/mochan-tk/hackathon-for-student-20261017)で **Use this template → Create a new repository** を選び、チーム用リポジトリを作ります。すでに作ったものがある場合は、そのリポジトリを使います。
 3. チームのほかのメンバーも編集する場合は、リポジトリ所有者が **Settings → Collaborators** から招待し、各メンバーが招待を受け入れます。
 4. Copilot appを開き、**Sign in to GitHub** で今回使う学生アカウントにログインします。
@@ -155,9 +155,9 @@ docs/product.md、docs/tasks.md、docs/verification.mdと現在の変更を確�
 
 ### PCで確認する
 
-[確認の進め方](common/verification.md)に沿って、実装した人とは別の学生が **Run → Browser** の `http://127.0.0.1:4280` で実際に操作します。同じPCで交代して構いません。全画面のボタン・移動・戻る操作に加え、空の状態、入力ミス、スマートフォン幅を確認し、実際の結果を記録します。見た目を直したい場合は、Browserの **Pick & Polish** で要素を選んで伝えることもできます。
+[確認の進め方](common/verification.md)に沿って、実装した人とは別の学生が **Run → Browser** の `http://127.0.0.1:4280` で実際に操作します。同じPCで交代して構いません。必須DoDに対応する主要な操作経路のボタン・移動・戻る操作、その機能に関係する空の状態や入力ミス、スマートフォン幅を確認し、実際の結果を記録します。見た目を直したい場合は、Browserの **Pick & Polish** で要素を選んで伝えることもできます。
 
-サーバーとは別のTerminalで次の確認も行います。
+同じ変更・同じ環境で直前に成功し、記録済みの自動確認は再実行不要です。未実施の確認や、関連するコード・仕様・実行環境を変えた場合の確認は、サーバーとは別のTerminalで次を実行します。
 
 ```sh
 npm run check
@@ -193,8 +193,8 @@ PCとCodespacesのファイルは自動同期されません。**同じチーム
    npm run dev
    ```
 
-8. **Ports → 4280 → Open in Browser** を開き、[確認の進め方](common/verification.md)に沿って操作します。4280が表示されなければ **Forward a Port** で追加します。ポートの公開範囲は **Private** のままで構いません。別の学生もログイン済みの同じPCで交代して確認できます。Codespaceやサーバーを停止すると、この確認用URLは使えなくなります。
-9. Codespacesの別Terminalで `npm run check` と `npm run test:e2e` を実行します。結果・エラー全文・実際の操作結果をPCのCopilot appへ渡し、修正と `docs/verification.md` への記録を依頼します。スクリーンショットも添えられます。修正後は、再びAppの画面でcommit・pushするところから繰り返します。
+8. **Ports → 4280 → Open in Browser** を開きます。企画保存直後の初回は、スターターの表示と入力操作を確かめます。実装中は[確認の進め方](common/verification.md)に沿って今回の変更に対応する操作を確かめ、完成確認では必須DoDに対応する主要な操作経路を通します。4280が表示されなければ **Forward a Port** で追加します。ポートの公開範囲は **Private** のままで構いません。別の学生もログイン済みの同じPCで交代して確認できます。Codespaceやサーバーを停止すると、この確認用URLは使えなくなります。
+9. Codespacesの別Terminalで `npm run check` と `npm run test:e2e` を実行します。同じ変更・同じ環境で直前に成功し、記録済みなら再実行は不要です。結果・エラー全文・実際の操作結果をPCのCopilot appへ渡し、必要な修正と `docs/verification.md` への記録を依頼します。スクリーンショットも添えられます。**企画保存直後の初回は、この基本テストと起動確認が成功したら[「5. Interactiveで実装と確認を繰り返す」](#5-interactiveで実装と確認を繰り返す)へ戻り、企画の実装を始めます。** 実装後に修正した場合は、再びAppの画面でcommit・pushするところから繰り返します。
 
 別のブランチで使っていたCodespaceを再利用する場合は、左下のブランチ名から今回の作業ブランチへ切り替えてからPullします。一覧に見当たらなければ、手順5の方法で作業ブランチから新規作成できます。Pullでエラーが出た場合は、その表示をCopilotか運営へ渡してください。[CodespacesのGUI操作の公式手順](https://docs.github.com/en/codespaces/developing-in-a-codespace/using-source-control-in-your-codespace#pulling-changes-from-the-remote-repository)も参照できます。
 

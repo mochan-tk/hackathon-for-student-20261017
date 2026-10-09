@@ -8,7 +8,7 @@
 
 Azureへの自動公開まで行う場合、Publicリポジトリ、またはGitHub Proの個人アカウント所有のPrivateリポジトリで進められます。Organization所有のPrivateリポジトリではOrganizationのGitHub Team以上が必要です。[公開の初期設定](common/azure-setup.md)を参照してください。
 
-1. [企画の進め方](common/ideation.md)に沿って、誰の何を解決するかをチームで決めます。
+1. [企画の進め方](common/ideation.md)の手順1〜5で、誰の何を解決するかと画面案をチームで決めます。手順6の文書整理は、環境を準備した後、このガイドの手順4で行います。
 2. [教材のGitHubページ](https://github.com/mochan-tk/hackathon-for-student-20261017)で **Use this template → Create a new repository** を選びます。既にチーム用リポジトリを作っている場合は、そのリポジトリを使います。
 3. チームの代表者のアカウント、または利用できるOrganizationを所有者にして作成します。チーム全員が編集する場合は、リポジトリの **Settings → Collaborators** からメンバーを追加します。
 4. 以降は、作成したチームのリポジトリを開いて作業します。
@@ -134,11 +134,11 @@ docs/product.md、docs/tasks.md、docs/verification.mdと現在の変更を確�
 
 ## 6. 自分たちでも操作する
 
-[確認の進め方](common/verification.md)を開き、実装した人とは別の学生が4280の転送URLでアプリを操作します。同じPCで交代して確認して構いません。全画面のボタン・移動・戻る操作に加え、空の状態、入力ミス、スマートフォン幅を確認し、実際の結果を記録します。
+[確認の進め方](common/verification.md)を開き、実装した人とは別の学生が4280の転送URLでアプリを操作します。同じPCで交代して確認して構いません。必須DoDに対応する主要な操作経路のボタン・移動・戻る操作、その機能に関係する空の状態や入力ミス、スマートフォン幅を確認し、実際の結果を記録します。
 
 ブラウザ版Codespacesでは、VS Code Desktopの内蔵Browser Toolsと同じ機能が使えることを前提にしません。AIによる画面確認が使えなくても、**Playwrightのテスト＋人のブラウザ操作**で進められます。MCPの追加は必須ではありません。
 
-自分でも確認を実行する場合は、別ターミナルで次を実行します。
+同じ変更・同じ環境で直前に成功し、記録済みの自動確認は再実行不要です。未実施の確認や、関連するコード・仕様・実行環境を変えた場合の確認は、別ターミナルで次を実行します。
 
 ```sh
 npm run check

@@ -40,6 +40,8 @@ DoDは「使いやすい」のような感想で終えず、「何を操作す�
 
 ## 6. 開発用の文書に整理する
 
+まだリポジトリや開発環境を準備していない場合は、選んだ環境のガイド（[Codespaces](../codespaces.md)・[Copilot app](../copilot-app.md)）へ進みます。各ガイドの手順4で、この文書整理と実装計画をまとめて行えます。以下は、準備済みの環境で企画資料を整理するときの依頼例です。各環境の手順で整理済みなら、繰り返す必要はありません。
+
 手書き画像、Figmaの画面・遷移を参照できるようにし、[product.md](../product.md)へ整理します。企画メモと入力画像は [docs/source/](../source/README.md) に置きます。個人名や私的な連絡を含む原本はコミットせず、共有してよい内容だけを記録します。
 
 Copilotの編集できるモードで、[prepare-project](../../.github/skills/prepare-project/SKILL.md)を使います。例えば次のように頼めます。
@@ -60,4 +62,4 @@ docs/source/ の企画メモ・画面設計と、docs/product.md の決定済み
 要件と画面で食い違う点、未決定の点、最初に作る利用シナリオを示してください。
 ```
 
-内容をチームで確認してから、選んだ環境のガイド（[Codespaces](../codespaces.md)・[Copilot app](../copilot-app.md)）で計画と実装へ進みます。[共通の実装と修正の進め方](build-loop.md)も参照してください。各環境の手順で既に企画を整理している場合は、同じ作業を繰り返す必要はありません。
+内容をチームで確認してから、選んだ環境のガイド（[Codespaces](../codespaces.md)・[Copilot app](../copilot-app.md)）で計画と実装へ進みます。[共通の実装と修正の進め方](build-loop.md)も参照してください。

@@ -4,7 +4,9 @@
 
 ## 1. 自動確認を実行する
 
-選んだ実行場所の別Terminalで行います。Copilot appで編集してCodespacesで実行する場合は、[変更を渡す手順](../copilot-app.md#codespacesへ変更を渡して確認する)でCodespacesへ取り込んでから確認し、その結果をAppへ返します。
+同じ変更・同じ環境に対して直近に実行し、成功を記録済みの `npm run check` と `npm run test:e2e` は、その結果を使えます。未実施の場合や、確認結果に影響する変更・実行環境の変更があった場合は再実行します。自動確認が成功していても、手順2の学生による実操作は必要です。
+
+実行する場合は、選んだ実行場所の別Terminalで行います。Copilot appで編集してCodespacesで実行する場合は、[変更を渡す手順](../copilot-app.md#codespacesへ変更を渡して確認する)でCodespacesへ取り込んでから確認し、その結果をAppへ返します。
 
 ```bash
 npm run check
