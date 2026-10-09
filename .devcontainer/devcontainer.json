@@ -1,21 +1,15 @@
 {
-  "name": "Student Hackathon · Node 24",
+  "name": "Student Hackathon · Choose your stack",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:24-bookworm",
-  "remoteUser": "node",
-  "postCreateCommand": "npm ci && npx playwright install --with-deps chromium",
-  "forwardPorts": [5173],
-  "portsAttributes": {
-    "5173": {
-      "label": "チームのアプリ",
-      "onAutoForward": "openBrowser"
-    }
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:4": {}
   },
+  "remoteUser": "node",
   "customizations": {
     "vscode": {
       "extensions": [
         "GitHub.copilot",
-        "GitHub.copilot-chat",
-        "dbaeumer.vscode-eslint"
+        "GitHub.copilot-chat"
       ]
     }
   }
