@@ -32,9 +32,9 @@ Publicの教材から作るForkもPublicです。共有できる企画・コー�
 
 ## 2. 使う環境を開く
 
-[![ページ上部のCodeへ](https://img.shields.io/badge/Code_%E2%86%92_Codespaces-238636?style=for-the-badge&logo=github&logoColor=white)](#start-of-content)
+[![Codespacesの開き方を見る](https://img.shields.io/badge/Codespaces_Guide-238636?style=for-the-badge&logo=github&logoColor=white)](handson/codespaces.md)
 
-**先にチームのForkを作成し、チーム側のREADMEで使ってください。** 上のボタンでページ上部へ戻り、緑色の **Code → Codespaces → Create codespace** を選びます。READMEをファイル単体で表示している場合は、先にページ上部の **「<> Code」タブ**を押します。チームの所有者・リポジトリ名と `codex/beginner-starter` ブランチを確認してから作成してください。メニューは自分で開きます。マシンを選べる場合は、まず2-coreを使います。準備が終わったら、下のCodespacesガイドでCopilotの設定と作業ブランチの作成を続けます。
+**先にチームのForkを作成し、チーム側のREADMEで使ってください。** ボタンで起動案内を開けます。案内ページ上部の **「<> Code」タブ**から同じチームのリポジトリへ戻り、`codex/beginner-starter` を選んで、緑色の **Code → Codespaces → Create codespace** へ進みます。リポジトリを検索し直す必要はありません。
 
 作成済みなら[Codespaces一覧から再開](https://github.com/codespaces)できます。Appで編集した変更の確認には、[push済みの作業ブランチを開く手順](handson/copilot-app.md#codespaces-transfer)を使います。
 
