@@ -4,7 +4,7 @@
 
 ## 開いて作業ブランチを作る
 
-1. READMEのボタンから作成済みなら同じCodespaceを使います。まだなら、チームのForkの`codex/beginner-starter`で **Code → Codespaces → Create codespace**。まず2-coreを選びます。
+1. READMEの案内に沿って作成済みなら同じCodespaceを使います。まだなら、チームのForkの`codex/beginner-starter`で **Code → Codespaces → Create codespace**。まず2-coreを選びます。
 2. 準備が終わり、ブラウザにVS Codeが開くまで待ちます。信頼の確認が出たらチームのリポジトリか確かめて進めます。
 3. Copilot Chatで学生アカウントを確認し、Session Targetがある場合は **Local**、モデルは **Auto** にします。
 4. 左下のブランチ名から **Create new branch** で`feat/first-demo`などを作ります。作業中の枝がある場合はその枝を使います。複数人は別の作業ブランチにします。
