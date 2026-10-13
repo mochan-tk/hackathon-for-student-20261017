@@ -7,7 +7,7 @@ READMEから開いた段階の操作を行い、案内に沿ってREADMEへ戻�
 ## 1. チームのCodespaceを開く
 
 1. [Forkの準備](../README.md#fork)で作成したチームのリポジトリを開き、所有者・名前と`main`ブランチを確かめます。
-2. READMEのボタンから作成済みなら同じCodespaceを使います。まだなら **Code → Codespaces → Create codespace on main** を選び、準備が終わるまで待ちます。マシンを選べる場合は、まず2-coreを使います。
+2. READMEの案内に沿って作成済みなら同じCodespaceを使います。まだなら **Code → Codespaces → Create codespace on main** を選び、準備が終わるまで待ちます。マシンを選べる場合は、まず2-coreを使います。
 3. Copilot Chatを開き、学生アカウントと[Copilot Studentの利用権利](https://github.com/settings/copilot)を確認します。モデルは **Auto**、**Session Target** が表示される場合は **Local** を選びます。ここでのLocalはチャットの種類で、実行場所はCodespacesです。
 4. 信頼の確認が出たら、今回のチームのリポジトリであることを確かめて信頼します。
 

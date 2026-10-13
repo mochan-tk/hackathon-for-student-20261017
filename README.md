@@ -28,9 +28,9 @@
 
 ## 2. 開発環境を開く
 
-[![Codespacesの作成画面を開く](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new)
+[![このリポジトリのCodeボタンへ](https://img.shields.io/badge/Code_%E2%86%92_Codespaces-238636?style=for-the-badge&logo=github&logoColor=white)](./#)
 
-**先にチームのForkを作成してください。** Codespacesで編集を始める場合は、ボタン先の **Repository** でチームのFork、**Branch** で `main`、**Machine type** で2-coreを選び、**Create codespace** を押します。準備が終わったら、下のCodespacesガイドでCopilotの設定と作業ブランチの作成を続けます。
+**先にチームのForkを作成し、チーム側のREADMEで使ってください。** 上のボタンで、このリポジトリのトップへ戻れます。チームの所有者・リポジトリ名と `main` ブランチを確認し、上部の緑色の **Code → Codespaces → Create codespace** を選びます。メニューは自分で開きます。マシンを選べる場合は、まず2-coreを使います。準備が終わったら、下のCodespacesガイドでCopilotの設定と作業ブランチの作成を続けます。
 
 作成済みなら[Codespaces一覧から再開](https://github.com/codespaces)できます。Appで編集した変更の確認には、[push済みの作業ブランチを開く手順](handson/copilot-app.md#codespaces-transfer)を使います。
 
