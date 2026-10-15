@@ -30,20 +30,24 @@ Publicの教材から作るForkもPublicです。共有できる企画・コー�
 
 初回に試すなら **Actions → Check → Run workflow** で`codex/beginner-starter`を選び、OIDC表示用のチェックを外します。公開用変数を設定しなければテストだけが動き、Azureの準備は不要です。この手動実行は、後で作るPRの最新CIの代わりにはしません。
 
+<a id="environment"></a>
+
 ## 2. 使う環境を開く
 
 [![Codespacesの作成画面を開く](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new)
 
-**先にチームのForkを作成してください。** Codespacesで編集を始める場合は、ボタン先の **Repository** でチームのFork、**Branch** で `codex/beginner-starter`、**Machine type** で2-coreを選び、**Create codespace** を押します。準備が終わったら、下のCodespacesガイドでCopilotの設定と作業ブランチの作成を続けます。
+**先にチームのForkを作成してください。** Codespacesで編集を始める場合は、ボタン先の **Repository** でチームのFork、**Branch** で `codex/beginner-starter`、**Machine type** で2-coreを選び、**Create codespace** を押します。準備が終わったらCopilot Chatを開きます。
 
 作成済みなら[Codespaces一覧から再開](https://github.com/codespaces)できます。Appで編集した変更の確認には、[push済みの作業ブランチを開く手順](handson/copilot-app.md#codespaces-transfer)を使います。
 
 | 編集・動作確認する場所 | 環境の操作手順 |
 | --- | --- |
-| CodespacesのCopilot Chat | [Codespaces](handson/codespaces.md) |
+| CodespacesのCopilot Chat | このREADMEのまま進めます |
 | Copilot appで編集し、PCまたはCodespacesで確認 | [Copilot app](handson/copilot-app.md) |
 
-学生アカウントでCopilot Studentの有効化と利用残量を確認し、モデルは **Auto** を使います。GitHub ProとCopilotの利用権利は別です。環境ガイドはその時点の操作だけ読み、作業ブランチと実行場所を準備したら、この下へ戻ります。開発の進め方はこのREADMEを本線にします。
+学生アカウントでCopilot Studentの有効化と利用残量を確認し、モデルは **Auto** を使います。GitHub ProとCopilotの利用権利は別です。Codespacesで **Session Target** が表示される場合は **Local** を選びます。
+
+Codespacesでは左下のブランチ名から **Create new branch** を選び、`feat/first-demo`などの作業ブランチを作ります。作成済みなら同じ作業ブランチを使います。Appの場合は上のガイドで作業ブランチと実行場所を準備したら次へ進みます。開発の進め方はこのREADMEを本線にします。
 
 <a id="prepare-docs"></a>
 
@@ -169,6 +173,10 @@ verify-goalで照合し、作業状態・実行場所・操作と結果・未達
 
 `PROGRESS.md`も必要になった時点で作ります。認識されないSkillは `.github/skills/verify-goal/SKILL.md` を明示します。短い修正は差分と期待結果だけ伝えて構いません。同じ条件で確認済みのテストを、変更なしで繰り返す必要はありません。
 
+<a id="run"></a>
+
+Codespacesでは **Terminal → New Terminal** で下表の準備・起動コマンドを実行します。初回の依存インストールが成功済みなら`npm ci`の再実行は不要です。サーバーを起動したまま **Ports → 4280 → Open in Browser** で開きます。ポートがなければ **Forward a Port** で追加し、公開範囲は **Private** のまま使います。テストは別のTerminalで実行します。
+
 | 用途 | コマンド・確認先 |
 | --- | --- |
 | 初回・依存変更時の準備 | `npm ci`（Node.js 24） |
@@ -195,7 +203,9 @@ PROGRESSへ、対象の変更・実行場所・日時、操作と期待結果、
 
 ## 7. 保存して、チーム内PRで共有する
 
-環境ガイドの[Codespaces](handson/codespaces.md#save-and-share)／[App](handson/copilot-app.md#save-and-share)のGUIで、コード・PLAN・PROGRESS・共有してよい入力資料をcommit・pushします。GitHubのチームForkで **Compare & pull request** を開き、必要なら **compare across forks** で次を選びます。
+コード・PLAN・PROGRESS・共有してよい入力資料をcommit・pushします。Codespacesでは **Source Control** で差分を確認し、対象ファイルの **＋** でステージして **Commit** します。完了後、初回は **Publish Branch**、以降は **Source Control → … → Push** を選び、GitHubの同じ作業ブランチに変更が届いたことを確認します。Appの場合は[AppのGUI手順](handson/copilot-app.md#save-and-share)を使います。
+
+GitHubのチームForkで **Compare & pull request** を開き、必要なら **compare across forks** で次を選びます。
 
 | 比較の項目 | 選ぶもの |
 | --- | --- |
@@ -215,7 +225,7 @@ CIが始まらなければ[Actionsの有効化](#enable-actions)を確認しま�
 
 確認済みのプレビューを使い、「誰の何を解決するか → 主要操作のデモ → 確認できたこと → 残ること」を説明します。CodespacesのPrivate URLはログイン済みPCから投影できます。利用者の課題を解決できたか未検証なら、仮説として話します。
 
-前のPRをマージ済みなら、まず[次の作業ブランチを準備](#after-merge)します。その後、発表で得た気づきと次の作業をPROGRESSへ残し、GUIで保存・pushして[PRで共有](#share)します。記録だけの変更ならCodespacesやアプリの再起動は不要です。サーバーを止め、Codespacesを使った場合は **Stop codespace** も行います。環境ごとの終了方法は[Codespaces](handson/codespaces.md#stop)／[App](handson/copilot-app.md#stop)を参照します。
+前のPRをマージ済みなら、まず[次の作業ブランチを準備](#after-merge)します。その後、発表で得た気づきと次の作業をPROGRESSへ残し、GUIで保存・pushして[PRで共有](#share)します。記録だけの変更ならCodespacesやアプリの再起動は不要です。CodespacesではTerminalの **Ctrl+C** でサーバーを止め、[Codespaces一覧](https://github.com/codespaces)から **Stop codespace** も行います。Appの終了操作は[Appの手順](handson/copilot-app.md#stop)を参照します。
 
 継続して使えるURLが必要なチームだけ、運営と[Azure Container Appsへの公開](handson/azure.md)へ進みます。公開した場合は同ガイドの終了・費用確認も行います。
 

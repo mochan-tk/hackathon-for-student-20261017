@@ -54,7 +54,7 @@ Codespacesで確認するチームは下の手順へ進み、PCで実行する�
 5. 別Terminalで`npm run check`と`npm run test:e2e`を確認し、結果・エラー全文・実際の操作結果をPCのAppへ返します。同じ変更・環境で記録済みなら再実行不要です。
 6. AppでPROGRESSへの記録と必要な修正を依頼します。修正したら再びcommit・pushから繰り返します。初回のPLAN保存直後は起動と基本テストが通れば[実装](../README.md#build)へ、実装後は[チーム確認](../README.md#verify)へ戻ります。
 
-初回の信頼確認や準備エラーは[Codespacesの操作](codespaces.md)を参照して、この手順へ戻ります。PCの`.env`はGitで移りません。必要な設定はCodespacesにも用意します。Codespacesでも編集した場合はそちらでcommit・pushし、PCの未保存変更を確認して **Pull changes**で取り込んでから再開します。競合は運営へ相談し、変更を捨てません。
+Codespacesで起動して画面を開く操作は[READMEの起動手順](../README.md#run)を参照します。PCの`.env`はGitで移りません。必要な設定はCodespacesにも用意します。Codespacesでも編集した場合はそちらでcommit・pushし、PCの未保存変更を確認して **Pull changes**で取り込んでから再開します。競合は運営へ相談し、変更を捨てません。
 
 <a id="stop"></a>
 

@@ -42,7 +42,7 @@ Planではチームが確認できる草案を作り、合意してから保存�
 
 ## 環境と配布の確認先
 
-- 実際の操作：[Codespaces](codespaces.md)／[Copilot app](copilot-app.md)。Copilotの[プラン](https://docs.github.com/en/copilot/get-started/plans)・[Auto](https://docs.github.com/en/copilot/concepts/models/auto-model-selection)は学生自身のアカウントでも確認します。
+- 実際の操作：[READMEのCodespaces手順](../README.md#environment)／[Copilot app](copilot-app.md)。Copilotの[プラン](https://docs.github.com/en/copilot/get-started/plans)・[Auto](https://docs.github.com/en/copilot/concepts/models/auto-model-selection)は学生自身のアカウントでも確認します。
 - Fork：[作成](https://docs.github.com/en/pull-requests/how-tos/work-with-forks/fork-a-repo)・[公開範囲](https://docs.github.com/en/pull-requests/reference/forks#visibility-of-forks)・[Actions](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#workflows-in-forked-repositories)。チーム内PRの送り先と実際のCI結果を確認します。
 - App：[session](https://docs.github.com/en/copilot/how-tos/github-copilot-app/agent-sessions)・[Setup／Runの設定](https://docs.github.com/en/copilot/reference/github-copilot-app-reference/repository-configuration)。Codespaces：[ポート転送](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace)。
 - 任意の公開：[Azure手順](azure.md)と[Container Appsのコンテナ仕様](https://learn.microsoft.com/en-us/azure/container-apps/containers)。開発中の確認と公開先の確認を分けます。
