@@ -69,7 +69,7 @@ Scriptsが空なら設定の作成・受け入れを確認します。起動済�
 5. **Ports → 実際のポート → Open in Browser** で開き、今回の変更を操作します。ポートがなければ **Forward a Port** で追加し、公開範囲は **Private** のまま使います。
 6. コマンド・結果・エラー全文・実際の操作結果をPCのAppへ返し、`PROGRESS.md`への記録と必要な修正を依頼します。修正後も手順1から繰り返します。最後は[READMEの完成確認](../README.md#verify)で別の学生も操作します。
 
-Codespacesの準備やブラウザテストで困ったら[Codespacesの起動手順](codespaces.md#run)を参照します。Codespacesでも編集した場合は、その変更をcommit・pushし、PC側の変更を保全してからAppの **Pull changes** で取り込みます。
+Codespacesで起動して画面を開く操作は[READMEの起動手順](../README.md#run)を参照します。Codespacesでも編集した場合は、その変更をcommit・pushし、PC側の変更を保全してからAppの **Pull changes** で取り込みます。
 
 <a id="save-and-share"></a>
 

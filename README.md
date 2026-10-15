@@ -2,7 +2,7 @@
 
 **企画資料を `docs/` に置く → CopilotのPlanで相談する → 作って確かめる → 発表する。**
 
-前段のワークで考えた課題・アイデアを使って開発します。資料はPDF・画像・Markdown・テキストなど、チームが用意した形式で構いません。**UIのイメージ画像やFigmaの作成は必須ではありません。** このREADMEを本線にして、環境の操作だけ下のガイドで確認します。
+前段のワークで考えた課題・アイデアを使って開発します。資料はPDF・画像・Markdown・テキストなど、チームが用意した形式で構いません。**UIのイメージ画像やFigmaの作成は必須ではありません。** このREADMEを本線に進めます。
 
 <a id="fork"></a>
 
@@ -26,20 +26,24 @@
 
 **Actionsもチーム側で確認します。** 有効化の案内が出たら内容を確認して有効にします。mainには最初はアプリもCIもありません。一覧がなくても進め、最初のCIを作った後にPRで実行を確認します。初心者向けは既存の **Check** を使います。動かない場合は、PRの送り先・ワークフローの条件・**Settings → Actions → General** を運営と確認します。有効化前のPRは実行済みとは扱わず、標準の`pull_request`設定なら **Close → Reopen** で再実行できます。mainでは生成した条件を確認してから操作します。
 
+<a id="environment"></a>
+
 ## 2. 開発環境を開く
 
 [![Codespacesの作成画面を開く](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new)
 
-**先にチームのForkを作成してください。** Codespacesで編集を始める場合は、ボタン先の **Repository** でチームのFork、**Branch** で `main`、**Machine type** で2-coreを選び、**Create codespace** を押します。準備が終わったら、下のCodespacesガイドでCopilotの設定と作業ブランチの作成を続けます。
+**先にチームのForkを作成してください。** Codespacesで編集を始める場合は、ボタン先の **Repository** でチームのFork、**Branch** で `main`、**Machine type** で2-coreを選び、**Create codespace** を押します。準備が終わったらCopilot Chatを開きます。
 
 作成済みなら[Codespaces一覧から再開](https://github.com/codespaces)できます。Appで編集した変更の確認には、[push済みの作業ブランチを開く手順](handson/copilot-app.md#codespaces-transfer)を使います。
 
 | 使う環境 | 準備・操作のガイド |
 | --- | --- |
-| CodespacesのVS Codeで編集・実行する | [Codespaces](handson/codespaces.md) |
+| CodespacesのVS Codeで編集・実行する | このREADMEのまま進めます |
 | PCのGitHub Copilot appで編集する | [Copilot app](handson/copilot-app.md)。実行先はPCまたはCodespacesを選べます |
 
-GitHub Copilot StudentとGitHub Proを使う想定です。利用権利と残量を確認し、モデルは **Auto** を使います。ガイドに沿って、チームの基準ブランチから作業ブランチを作ったら次へ進みます。
+GitHub Copilot StudentとGitHub Proを使う想定です。学生アカウントの利用権利と残量を確認し、モデルは **Auto** を使います。Codespacesで **Session Target** が表示される場合は **Local** を選びます。
+
+Codespacesでは **Terminal → New Terminal** を開き、`git switch -c feat/first-demo`で作業ブランチを作ります。作成済みなら同じ作業ブランチを使います。Appの場合は上のガイドで作業ブランチを準備したら次へ進みます。
 
 <a id="prepare-docs"></a>
 
@@ -156,7 +160,11 @@ Appで編集してCodespacesで実行する場合は、変更を渡す手順を�
 
 mainには初期アプリがないため、採用する技術に合う最小構成から作ります。依存関係・テスト・CIも必要なものを用意します。まだ存在しない`npm`コマンドやAppのRun設定を、そのまま実行しないでください。日常の開発にDockerやAzureは必須ではありません。
 
-起動操作は[Codespaces](handson/codespaces.md#run)／[Copilot app](handson/copilot-app.md#run)を使います。Appで編集してCodespacesで実行する場合は、[GUIで変更を渡す手順](handson/copilot-app.md#codespaces-transfer)を使います。
+<a id="run"></a>
+
+Codespacesでは **Terminal → New Terminal** で`PLAN.md`の準備・起動コマンドを実行し、サーバーを起動したまま **Ports → 実際のポート → Open in Browser** で開きます。ポートがなければ **Forward a Port** で追加し、公開範囲は **Private** のまま使います。テストは別のTerminalで実行します。
+
+PCでの起動は[Copilot appの手順](handson/copilot-app.md#run)を使います。Appで編集してCodespacesで実行する場合は、[GUIで変更を渡す手順](handson/copilot-app.md#codespaces-transfer)を使います。
 
 <a id="verify"></a>
 
@@ -172,7 +180,9 @@ mainには初期アプリがないため、採用する技術に合う最小構�
 
 ## 7. 保存してチーム内のPRを作る
 
-[CodespacesのGUI](handson/codespaces.md#save-and-share)／[AppのGUI](handson/copilot-app.md#save-and-share)で差分を確認し、commit・pushします。PR作成前に、**base repositoryとhead repositoryは同じチームのFork、baseはチームの既定ブランチ、compareは作業ブランチ**であることを確認します。必要ならGitHubの **compare across forks** で選びます。Appで送り先を事前に確認できない場合は、GitHubの比較画面から作成します。
+Codespacesでは **Source Control** で差分を確認し、対象ファイルの **＋** でステージして **Commit** します。完了後、初回は **Publish Branch**、以降は **Source Control → … → Push** を選び、GitHubの同じ作業ブランチに変更が届いたことを確認します。Appの場合は[AppのGUI手順](handson/copilot-app.md#save-and-share)を使います。
+
+GitHubのチームForkで **Compare & pull request** を開き、PR作成前に、**base repositoryとhead repositoryは同じチームのFork、baseはチームの既定ブランチ、compareは作業ブランチ**であることを確認します。必要ならGitHubの **compare across forks** で選びます。Appで送り先を事前に確認できない場合は、GitHubの比較画面から作成します。
 
 PRでCIが実際に動き、成功したことを確認します。チェックがない・未実行・Skippedは成功ではありません。[Actionsの確認](#enable-actions)も使ってください。CIのURL・対象変更・結果を`PROGRESS.md`へ追記して保存し、最新のチェックと差分をチームで確認してマージします。記録だけの追加で同じ結果を際限なく追記する必要はありません。
 
